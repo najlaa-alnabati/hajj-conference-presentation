@@ -1,0 +1,1929 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إحصائيات الحجاج - عرض دوري متكامل</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/11.2.0/highcharts.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'IBM Plex Sans Arabic', 'Segoe UI', sans-serif;
+      background: #f5f5f5;
+      padding: 24px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    
+    .header-pill {
+      width: 100%;
+      max-width: 1400px;
+      background: #495057;
+      color: #fff;
+      text-align: center;
+      padding: 18px 20px;
+      font-size: 26px;
+      font-weight: 700;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      letter-spacing: 0.3px;
+      margin-bottom: 20px;
+    }
+    
+    .frame {
+      width: 100%;
+      max-width: 1600px;
+      background: #fff;
+      padding: 18px;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      min-height: 600px;
+    }
+    
+    .view {
+      min-height: 520px;
+      transition: opacity 0.3s ease;
+    }
+    
+    .fade-out { opacity: 0; }
+    .fade-in { opacity: 1; }
+    
+    /* Charts Styles */
+    .charts-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 26px;
+      margin-top: 6px;
+    }
+    
+    .chart-card {
+      background: #fafafa;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 18px 16px;
+      transition: box-shadow 0.2s;
+    }
+    
+    .chart-card:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .chart-title {
+      font-size: 15px;
+      color: #2c3e50;
+      margin-bottom: 16px;
+      text-align: center;
+      font-weight: 700;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e0e0e0;
+    }
+    
+    .chart-area {
+      min-height: 280px;
+    }
+    
+    .chart-card-line {
+      min-height: 420px;
+    }
+    
+    /* Donut Charts */
+    .donut-header {
+      background: #5B5B5E;
+      color: #fff;
+      text-align: center;
+      padding: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 8px;
+      margin-bottom: 25px;
+    }
+    
+    .chart-container {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 10px;
+    }
+    
+    .chart-card-donut {
+      width: 360px;
+      min-height: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .donut-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      pointer-events: none;
+      z-index: 10;
+    }
+    
+    .donut-center span {
+      display: block;
+      font-size: 14px;
+      color: #666;
+      margin-top: 5px;
+    }
+    
+    /* Summary View */
+    .top-stats {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 30px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      border: 1px solid #dee2e6;
+    }
+    
+    .icon-circle {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      border: 3px solid #dee2e6;
+    }
+    
+    .icon-circle svg {
+      width: 32px;
+      height: 32px;
+      fill: #6c757d;
+    }
+    
+    .stat-info {
+      text-align: right;
+    }
+    
+    .stat-number {
+      font-size: 28px;
+      font-weight: 700;
+      color: #212529;
+      direction: ltr;
+      text-align: right;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      color: #6c757d;
+      margin-top: 6px;
+      font-weight: 500;
+    }
+    
+    .percentage-badge {
+      font-size: 22px;
+      font-weight: 700;
+      color: #495057;
+      min-width: 50px;
+      text-align: center;
+    }
+    
+    .circles-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 50px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+    
+    .circle {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: #212529;
+      text-align: center;
+      background: white;
+      border: 4px solid #dee2e6;
+    }
+    
+    .circle.primary {
+      width: 220px;
+      height: 220px;
+    }
+    
+    .circle.large {
+      width: 260px;
+      height: 260px;
+      border-color: #495057;
+      border-width: 5px;
+    }
+    
+    .circle.secondary {
+      width: 220px;
+      height: 220px;
+    }
+    
+    .circle-icon {
+      width: 45px;
+      height: 45px;
+      margin-bottom: 15px;
+    }
+    
+    .circle-icon svg {
+      width: 100%;
+      height: 100%;
+      fill: #495057;
+    }
+    
+    .circle-title {
+      font-size: 15px;
+      margin-bottom: 12px;
+      font-weight: 600;
+      color: #495057;
+    }
+    
+    .circle-number {
+      font-size: 32px;
+      font-weight: 700;
+      direction: ltr;
+      color: #212529;
+    }
+    
+    .circle-subtitle {
+      font-size: 13px;
+      margin-top: 10px;
+      color: #6c757d;
+    }
+    
+    .circle-badge {
+      color: #495057;
+      padding: 8px 20px;
+      font-size: 12px;
+      margin-top: 0px;
+      font-weight: 600;
+    }
+    
+    .percentage {
+      font-size: 18px;
+      margin-top: 8px;
+      font-weight: 700;
+      color: #495057;
+    }
+    
+    .bottom-info {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-top: 0px;
+    }
+    
+    .info-box {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      color: #495057;
+      padding: 5px 5px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 18px;
+      line-height: 1.8;
+      min-width: 530px;
+      max-height: 130px;
+
+      border: 2px solid #dee2e6;
+    }
+    
+    .info-box strong {
+      font-size: 32px;
+      display: block;
+      margin-bottom: 2px;
+      color: #212529;
+      font-weight: 700;
+    }
+    
+    /* Inside Gender View */
+    .inside-gender-container {
+      padding: 20px;
+    }
+    
+    .header-box {
+      background: linear-gradient(135deg, #495057 0%, #6c757d 100%);
+      padding: 15px 15px;
+      text-align: center;
+      border-radius: 10px;
+      margin-top: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .header-text {
+      color: white;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.8;
+    }
+    
+    .header-text strong {
+      font-weight: 700;
+      font-size: 22px;
+    }
+    
+    .stats-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 100px;
+      margin-top: 50px;
+      flex-wrap: wrap;
+    }
+    
+    .side-circle {
+      position: relative;
+      width: 240px;
+      height: 240px;
+    }
+    
+    .side-circle svg.circle-bg {
+      transform: rotate(-90deg);
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+    
+    .circle-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    
+    .icon-svg {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 12px;
+      opacity: 0.7;
+    }
+    
+    .female .icon-svg {
+      color: #adb5bd;
+    }
+    
+    .male .icon-svg {
+      color: #495057;
+    }
+    
+    .number {
+      font-size: 34px;
+      font-weight: 700;
+      margin-bottom: 5px;
+      color: #212529;
+      direction: ltr;
+    }
+    
+    .label {
+      font-size: 15px;
+      color: #6c757d;
+      font-weight: 500;
+    }
+    
+    .female .percentage {
+      color: #adb5bd;
+    }
+    
+    .male .percentage {
+      color: #495057;
+    }
+    
+    .percentage-label {
+      font-size: 16px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    
+    .female .percentage-label {
+      color: #adb5bd;
+    }
+    
+    .male .percentage-label {
+      color: #495057;
+    }
+    
+    .center-section {
+      position: relative;
+      width: 400px;
+      height: 400px;
+    }
+    
+    .center-circle {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    
+    .donut-chart {
+      transform: rotate(-90deg);
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.12));
+    }
+    
+    .center-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      width: 220px;
+      height: 220px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 0 10px #f8f9fa, 0 4px 12px rgba(0,0,0,0.08);
+    }
+    
+    .center-title {
+      font-size: 16px;
+      color: #6c757d;
+      margin-bottom: 3px;
+      font-weight: 500;
+    }
+    
+    .center-number {
+      font-size: 42px;
+      font-weight: 700;
+      color: #212529;
+      margin: 8px 0;
+      direction: ltr;
+    }
+    
+    .center-percentage {
+      font-size: 26px;
+      font-weight: 700;
+      color: #495057;
+      margin-bottom: 5px;
+    }
+    
+    .center-year {
+      font-size: 13px;
+      color: #adb5bd;
+      font-weight: 500;
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 60px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border: 1px solid #dee2e6;
+    }
+    
+    .footer-text {
+      font-size: 13px;
+      color: #6c757d;
+      line-height: 1.8;
+    }
+    
+    .info-boxes {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 50px;
+      flex-wrap: wrap;
+    }
+    
+    .info-box-number {
+      font-size: 28px;
+      font-weight: 700;
+      color: #212529;
+      margin-bottom: 8px;
+      direction: ltr;
+    }
+    
+    .info-box-label {
+      font-size: 14px;
+      color: #6c757d;
+      font-weight: 500;
+    }
+    
+    /* Controls */
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 18px;
+      padding-top: 12px;
+      border-top: 1px solid #e9e9e9;
+    }
+    
+    .view-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    
+    .view-title {
+      font-size: 14px;
+      color: #495057;
+      font-weight: 700;
+    }
+    
+    .dots {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #d0d0d0;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+    
+    .dot:hover {
+      background: #999;
+    }
+    
+    .dot.active {
+      background: #495057;
+      width: 28px;
+      border-radius: 5px;
+    }
+    
+    .btn {
+      background: #fff;
+      color: #495057;
+      border: 1px solid #495057;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    
+    .btn:hover {
+      background: #495057;
+      color: #fff;
+    }
+    
+    .progress {
+      height: 3px;
+      background: #e0e0e0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: #495057;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+
+     .container {
+      max-width: 900px;
+      margin: 0px;
+    }
+
+    .main-frame {
+      background: white;
+      border-radius: 16px;
+      padding: 0px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      border: 3px solid #dee2e6;
+    }
+
+    .header {
+      background: #495057;
+      color: white;
+      text-align: center;
+      padding: 18px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .header h1 {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .top-stats {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .stat-item {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 16px 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      min-width: 260px;
+    }
+
+    .stat-info {
+      text-align: center;
+      flex: 1;
+    }
+
+    .stat-number {
+      font-size: 26px;
+      font-weight: 800;
+      color: #212529;
+      direction: ltr;
+      font-feature-settings: "tnum";
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: #6c757d;
+      margin-top: 0px;
+    }
+
+    .icon-circle {
+      width: 50px;
+      height: 50px;
+      background: #495057;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-circle svg {
+      width: 28px;
+      height: 28px;
+      fill: white;
+    }
+
+    .percentage-badge {
+      background: #495057;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 18px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .org-structure {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .node {
+      background: white;
+      border: 2px solid #dee2e6;
+      border-radius: 10px;
+      padding: 5px 5px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      min-width: 160px;
+      position: relative;
+    }
+
+    .connector-circle {
+      width: 16px;
+      height: 16px;
+      background: white;
+      border: 2px solid #dee2e6;
+      border-radius: 50%;
+      margin: 0 auto;
+    }
+
+    .vertical-line {
+      width: 2px;
+      height: 6px;
+      background: #dee2e6;
+      margin: 0px;
+    }
+
+    .level {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      position: relative;
+      width: 100%;
+    }
+
+    .level-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+    }
+
+    .level-1 .node {
+      border-color: #495057;
+      border-width: 3px;
+      min-width: 220px;
+      max-height: 140px;
+    }
+
+    .node-icon {
+      width: 28px;
+      height: 28px;
+      margin: 0 auto 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #495057;
+      border-radius: 50%;
+    }
+
+    .node-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: white;
+    }
+
+    .node-label {
+      font-size: 13px;
+      color: #6c757d;
+      margin-bottom: 6px;
+    }
+
+    .node-number {
+      font-size: 24px;
+      font-weight: 800;
+      color: #212529;
+      direction: ltr;
+      font-feature-settings: "tnum";
+    }
+
+    .node-text {
+      font-size: 12px;
+      color: #6c757d;
+      margin-top: 3px;
+    }
+
+    .level-2 .node {
+      border-color: #495057;
+      border-width: 2px;
+      min-width: 190px;
+      max-height: 140px;
+
+    }
+
+    .level-2 .node-number {
+      font-size: 22px;
+    }
+
+    .node-percent {
+      font-size: 16px;
+      font-weight: 700;
+      color: #495057;
+      margin-top: 3px;
+    }
+
+    .level-3 {
+      margin-top: 15px;
+    }
+
+    .level-3 .node {
+      min-width: 140px;
+      padding: 12px 18px;
+      border-color: #dee2e6;
+      border-width: 2px;
+      max-height: 140px;
+
+    }
+
+    .level-3 .node-number {
+      font-size: 18px;
+    }
+
+    .level-3 .node-icon {
+      width: 26px;
+      height: 26px;
+      margin-bottom: 6px;
+    }
+
+    .level-3 .node-icon svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .branch-line {
+      width: 60%;
+      height: 2px;
+      background: #dee2e6;
+      margin: 2px auto;
+    }
+
+   
+   
+    @media (max-width: 768px) {
+      .header-pill {
+        font-size: 20px;
+        padding: 14px;
+      }
+      .view {
+        min-height: 560px;
+      }
+      .stats-container {
+        gap: 60px;
+      }
+
+       .top-stats {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .stat-item {
+        min-width: auto;
+      }
+
+      .level {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .summary {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .branch-line {
+        width: 80%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+
+<div class="header-pill" id="dynamicHeader">إحصائيات الحجاج</div>  
+  <div class="frame">
+    
+    <div id="view" class="view fade-in"></div>
+
+    <div class="controls">
+      <div class="view-info">
+        <div class="view-title" id="viewTitle"></div>
+        <div class="dots" id="dots"></div>
+      </div>
+      <button class="btn" id="pauseBtn" type="button">إيقاف مؤقت</button>
+    </div>
+    <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <script>
+    Highcharts.setOptions({
+      lang: { thousandsSep: ',' },
+      chart: { style: { fontFamily: "'IBM Plex Sans Arabic','Segoe UI',sans-serif" }, backgroundColor: 'transparent' },
+      colors: ['#495057','#adb5bd','#6c757d','#ced4da'],
+      tooltip: {
+        backgroundColor: 'rgba(255,255,255,0.96)',
+        borderColor: '#ddd',
+        borderWidth: 1,
+        borderRadius: 6,
+        style: { color: '#333', fontSize: '13px' },
+        useHTML: true
+      },
+      credits: { enabled: false },
+      exporting: { enabled: false }
+    });
+
+    const viewEl = document.getElementById('view');
+    const titleEl = document.getElementById('viewTitle');
+    const dotsEl = document.getElementById('dots');
+    const progressFill = document.getElementById('progressFill');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const dynamicHeader = document.getElementById('dynamicHeader');
+    const categories = ['1424','1425','1426','1427','1428','1429','1430','1431','1432','1433','1434','1435','1436','1437','1438','1439','1440','1441','1442','1443','1444','1445','1446'];
+
+    const views = [
+      { key: 'total-area', title: 'تطور أعداد الحجاج', render: FirstPage },
+      { key: 'outside-area', title: 'تطور أعداد حجاج الخارج', render: SecondPage },
+      { key: 'inside-area', title: 'تطور أعداد حجاج الداخل', render: ThirdPage },
+      { key: 'summary', title: 'إحصاءات حج 1446هـ', render: FourthPage },
+      { key: 'donuts', title: 'إحصاءات حج 1446هـ', render: FifthPage },
+      { key: 'inside-gender', title: 'إحصائيات حجاج الداخل لعام 1445هـ', render: SixthPage },
+      { key: 'inside-1446', title: 'حجاج الداخل 1446هـ', render: SeventhPage },
+      { key: 'outside-1446', title: 'حجاج الخارج 1446هـ', render: EighthPage },
+      { key: 'page10', title: 'حجاج الخارج 1446هـ', render: NinthPage },
+      { key: 'page10', title: 'حجاج الخارج 1446هـ', render: TenthPage },
+      { key: 'visitors', title: 'زوّار مجمّع الملك عبدالعزيز', render: eleventhPage }
+    ];
+
+    let current = 0, paused = false, tick = null, bar = null, prog = 0;
+
+    function buildDots() {
+      dotsEl.innerHTML = '';
+      views.forEach((v, i) => {
+        const d = document.createElement('div');
+        d.className = 'dot' + (i === current ? ' active' : '');
+        d.title = v.title;
+        d.onclick = () => { if(!paused) togglePause(); goTo(i); };
+        dotsEl.appendChild(d);
+      });
+    }
+
+    function updateUI() {
+      titleEl.textContent = views[current].title;
+      dynamicHeader.textContent = views[current].title; // ← إضافة جديدة هنا
+      [...dotsEl.children].forEach((d, i) => d.classList.toggle('active', i === current));
+    }
+
+    function goTo(i) {
+      current = i % views.length;
+      viewEl.classList.remove('fade-in');
+      viewEl.classList.add('fade-out');
+      setTimeout(() => {
+        viewEl.innerHTML = '';
+        views[current].render();
+        updateUI();
+        viewEl.classList.remove('fade-out');
+        viewEl.classList.add('fade-in');
+        resetProgress();
+      }, 220);
+    }
+
+    function next() { goTo((current + 1) % views.length); }
+    function startAuto() { clearInterval(tick); tick = setInterval(() => { if(!paused) next(); }, 10000); }
+    function startBar() {
+      clearInterval(bar);
+      prog = 0;
+      progressFill.style.width = '0%';
+      bar = setInterval(() => {
+        if(!paused) {
+          prog += 1;
+          if(prog > 100) prog = 0;
+          progressFill.style.width = prog + '%';
+        }
+      }, 100);
+    }
+    function resetProgress() { startBar(); }
+    function togglePause() { paused = !paused; pauseBtn.textContent = paused ? 'تشغيل' : 'إيقاف مؤقت'; }
+    pauseBtn.addEventListener('click', togglePause);
+
+    function FirstPage() {
+      viewEl.innerHTML = '<div id="chartTotal" style="min-height:500px"></div>';
+      setTimeout(() => {
+        Highcharts.chart('chartTotal', {
+          chart: { type: 'area', height: 500 },
+          title: { text: 'تطور أعداد الحجاج خلال الفترة 1424–1446هـ', style: { fontSize: '18px', fontWeight: '600' } },
+          xAxis: {
+            categories: categories,
+            plotBands: [{
+              from: 16.5, to: 18.5, color: 'rgba(220, 53, 69, 0.05)',
+              label: { text: 'جائحة كورونا', style: { color: '#dc3545', fontWeight: '600' } }
+            }]
+          },
+          yAxis: { title: { text: '' }, labels: { formatter: function() { return this.value.toLocaleString(); } } },
+          plotOptions: { area: { fillOpacity: 0.4, lineWidth: 2, marker: { enabled: true, radius: 3 } } },
+          series: [
+            { name: 'حجاج الداخل', data: [592368,629710,700603,724229,746511,679008,699313,989798,1099522,1408641,600718,696185,567876,537537,600108,612953,634379,1000,58745,144653,184130,221854,166654], color: '#adb5bd' },
+            { name: 'حجاج الخارج', data: [1419706,1534759,1557447,1654407,1707814,1729841,1613965,1799601,1828195,1752932,1379531,1389053,1384941,1325372,1752014,1758722,1855027,0,0,781409,1660915,1611310,1506576], color: '#6c757d' },
+            { name: 'إجمالي الحجاج', data: [2012074,2164469,2258050,2378636,2454325,2408849,2313278,2789399,2927717,3161573,1980249,2085238,1952817,1862909,2352122,2371675,2489406,1000,58745,926062,1845045,1833164,1673230], color: '#343a40' }
+          ]
+        });
+      }, 40);
+    }
+
+    function SecondPage() {
+      viewEl.innerHTML = '<div id="chartOutside" style="min-height:500px"></div>';
+      setTimeout(() => {
+        Highcharts.chart('chartOutside', {
+          chart: { type: 'area', height: 500 },
+          title: { text: 'إحصائيات حجاج الخارج (1424 - 1446 هـ)', style: { fontSize: '18px', fontWeight: '600' } },
+          xAxis: {
+            categories: categories,
+            plotBands: [{
+              from: 16.5, to: 18.5, color: 'rgba(220, 53, 69, 0.05)',
+              label: { text: 'جائحة كورونا', style: { color: '#dc3545', fontWeight: '600' } }
+            }]
+          },
+          yAxis: { title: { text: '' }, labels: { formatter: function() { return this.value.toLocaleString(); } } },
+          plotOptions: { area: { fillOpacity: 0.4, lineWidth: 2, marker: { enabled: true, radius: 3 } } },
+          series: [{ name: 'حجاج الخارج', data: [1419706,1534759,1557447,1654407,1707814,1729841,1613965,1799601,1828195,1752932,1379531,1389053,1384941,1325372,1752014,1758722,1855027,0,0,781409,1660915,1611310,1506576], color: '#495057', showInLegend: false }]
+        });
+      }, 40);
+    }
+
+    function ThirdPage() {
+      viewEl.innerHTML = '<div id="chartInside" style="min-height:500px"></div>';
+      setTimeout(() => {
+        Highcharts.chart('chartInside', {
+          chart: { type: 'area', height: 500 },
+          title: { text: 'إحصائيات حجاج الداخل (1424 - 1446 هـ)', style: { fontSize: '18px', fontWeight: '600' } },
+          xAxis: {
+            categories: categories,
+            plotBands: [{
+              from: 16.5, to: 18.5, color: 'rgba(220, 53, 69, 0.05)',
+              label: { text: 'جائحة كورونا', style: { color: '#dc3545', fontWeight: '600' } }
+            }]
+          },
+          yAxis: { title: { text: '' }, labels: { formatter: function() { return this.value.toLocaleString(); } } },
+          plotOptions: { area: { fillOpacity: 0.4, lineWidth: 2, marker: { enabled: true, radius: 3 } } },
+          series: [{ name: 'حجاج الداخل', data: [592368,629710,700603,724229,746511,679008,699313,989798,1099522,1408641,600718,696185,567876,537537,600108,612953,634379,1000,58745,144653,184130,221854,166654], color: '#6c757d', showInLegend: false}]
+        });
+      }, 40);
+    }
+
+
+  function FourthPage() {
+      const viewEl = document.getElementById('view');
+      viewEl.innerHTML = `
+        <div class="top-stats">
+          <div class="stat-item">
+            <div class="stat-info">
+              <div class="stat-number">795,389</div>
+              <div class="stat-label">إجمالي الإناث</div>
+            </div>
+            <div class="icon-circle">
+              <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </div>
+            <div class="percentage-badge">48%</div>
+          </div>
+          
+          <div class="stat-item">
+            <div class="percentage-badge">52%</div>
+            <div class="icon-circle">
+              <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </div>
+            <div class="stat-info">
+              <div class="stat-number">877,841</div>
+              <div class="stat-label">إجمالي الذكور</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="org-structure">
+          <div class="level level-1">
+            <div class="node">
+              <div class="node-icon">
+                <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+              </div>
+              <div class="node-label">إجمالي الحجاج</div>
+              <div class="node-number">1,673,230</div>
+              <div class="node-text">حاج/حاجة</div>
+            </div>
+          </div>
+
+          <div class="vertical-line"></div>
+          <div class="connector-circle"></div>
+          <div class="branch-line"></div>
+
+          <div class="level level-2">
+            <div class="level-wrapper">
+              <div class="node">
+                <div class="node-icon">
+                  <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                </div>
+                <div class="node-label">حجاج الداخل</div>
+                <div class="node-number">166,654</div>
+                <div class="node-percent">10%</div>
+              </div>
+              
+              <div class="vertical-line"></div>
+              <div class="connector-circle"></div>
+              <div class="branch-line" style="width: 80%;"></div>
+              
+              <div class="level level-3">
+                <div class="node">
+                  <div class="node-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                  </div>
+                  <div class="node-label">ذكور داخل</div>
+                  <div class="node-number">88,311</div>
+                </div>
+                <div class="node">
+                  <div class="node-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                  </div>
+                  <div class="node-label">إناث داخل</div>
+                  <div class="node-number">78,343</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="level-wrapper">
+              <div class="node">
+                <div class="node-icon">
+                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                </div>
+                <div class="node-label">حجاج الخارج (171 جنسية)</div>
+                <div class="node-number">1,506,576</div>
+                <div class="node-percent">90%</div>
+
+              </div>
+              
+              <div class="vertical-line"></div>
+              <div class="connector-circle"></div>
+              <div class="branch-line" style="width: 80%;"></div>
+              
+              <div class="level level-3">
+                <div class="node">
+                  <div class="node-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                  </div>
+                  <div class="node-label">ذكور خارج</div>
+                  <div class="node-number">789,530</div>
+                </div>
+                <div class="node">
+                  <div class="node-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                  </div>
+                  <div class="node-label">إناث خارج</div>
+                  <div class="node-number">717,046</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      `;
+    }
+function FifthPage() {
+  viewEl.innerHTML = `
+    <div class="chart-container">
+
+      <div class="chart-card-donut">
+        <div style="color:#CCB349;font-size:16px;font-weight:600;margin-bottom:15px">إجمالي أعداد الحجاج لعام 1446هـ</div>
+        <div style="position:relative;width:100%;height:300px" id="chart-inside-outside">
+          <div class="donut-center" id="center-io">
+            1,656,243<span style="font-size:16px;color:#666;">إجمالي (تقريبي)</span>
+          </div>
+        </div>
+      </div>
+      <div class="chart-card-donut">
+        <div style="color:#CCB349;font-size:16px;font-weight:600;margin-bottom:15px">تقسيم إجمالي أعداد الحجاج لعام 1446هـ على النوع</div>
+        <div style="position:relative;width:100%;height:300px;" id="chart-total">
+          <div class="donut-center" id="center-total">
+            1,637,787<span style="font-size:16px;color:#666;">إجمالي الحجاج</span>
+          </div>
+        </div>
+      </div>
+      <div class="chart-card-donut">
+        <div style="color:#CCB349;font-size:16px;font-weight:600;margin-bottom:15px">إجمالي أعداد الحجاج الإناث لعام 1446هـ</div>
+        <div style="position:relative;width:100%;height:300px" id="chart-female">
+          <div class="donut-center" id="center-female">
+            779,194<span style="font-size:16px;color:#666;">إجمالي الإناث</span>
+          </div>
+        </div>
+      </div>
+      <div class="chart-card-donut">
+        <div style="color:#CCB349;font-size:16px;font-weight:600;margin-bottom:15px">إجمالي أعداد الحجاج الذكور لعام 1446هـ</div>
+        <div style="position:relative;width:100%;height:300px" id="chart-male">
+          <div class="donut-center" id="center-male">
+            858,593<span style="font-size:16px;color:#666;">إجمالي الذكور</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  const donutOptions = (data, colors, title) => ({
+    chart: {
+      type: 'pie',
+      height: 300,
+      width: 350,
+      spacing: [0, 0, 0, 10],
+      backgroundColor: 'transparent'
+    },
+    title: { text: null },
+    plotOptions: {
+      pie: {
+        innerSize: '60%',
+        size: '60%',
+        colors: colors,
+        dataLabels: {
+          enabled: true,
+          format: '<b>{point.percentage:.1f}%</b><br>{point.y:,.0f}',
+          style: {
+            fontSize: '11px',
+            fontWeight: '600',
+            textOutline: '2px contrast',
+            color: '#000'
+          },
+          connectorWidth: 1,
+          connectorColor: '#888',
+        },
+        showInLegend: true
+      }
+    },
+    legend: { align: 'center', verticalAlign: 'bottom', rtl: true },
+    series: [{ name: title, data: data }]
+  });
+
+  setTimeout(() => {
+    Highcharts.chart('chart-female', donutOptions(
+      [{ name: 'داخل', y: 78343 }, { name: 'خارج', y: 717046 }],
+      ['#495057', '#adb5bd'],
+      'الإناث'
+    ));
+
+    Highcharts.chart('chart-male', donutOptions(
+      [{ name: 'داخل', y: 88311 }, { name: 'خارج', y: 789530 }],
+      ['#495057', '#adb5bd'],
+      'الذكور'
+    ));
+
+    Highcharts.chart('chart-total', donutOptions(
+      [{ name: 'ذكور', y: 877841 }, { name: 'إناث', y: 795389 }],
+      ['#495057', '#adb5bd'],
+      'الإجمالي'
+    ));
+
+    Highcharts.chart('chart-inside-outside', donutOptions(
+      [{ name: 'خارج', y: 1506576 }, { name: 'داخل', y: 166654 }],
+      ['#495057', '#adb5bd'],
+      'الإجمالي'
+    ));
+  }, 100);
+}
+
+function SixthPage() {
+  viewEl.innerHTML = `
+    <style>
+      .org-chart {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        margin: 40px 0;
+        position: relative;
+        flex-wrap: wrap;
+      }
+
+      .horizontal-connector {
+        width: 60px;
+        height: 3px;
+        background: #dee2e6;
+        flex-shrink: 0;
+      }
+
+      .circle-node {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+        border-radius: 16px;
+        background: white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        min-width: 220px;
+        border: 2px solid #dee2e6;
+      }
+
+      .main-circle {
+        border-color: #495057;
+        border-width: 3px;
+        min-width: 260px;
+        padding: 24px 20px;
+      }
+
+      .side-circle {
+        min-width: 200px;
+      }
+
+      .circle-node .icon {
+        margin-bottom: 14px;
+      }
+
+      .circle-node .label {
+        font-size: 14px;
+        color: #6c757d;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .circle-node .number {
+        font-size: 26px;
+        font-weight: 700;
+        color: #212529;
+        direction: ltr;
+        font-feature-settings: "tnum";
+        margin-bottom: 6px;
+      }
+
+      .circle-node .text,
+      .circle-node .percent {
+        font-size: 15px;
+        color: #495057;
+        font-weight: 600;
+      }
+
+      .header-box {
+        background: linear-gradient(135deg, #495057 0%, #6c757d 100%);
+        padding: 25px 40px;
+        text-align: center;
+        border-radius: 10px;
+        margin-top: 40px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .header-text {
+        color: white;
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 1.7;
+      }
+
+      .header-text strong {
+        font-weight: 700;
+        font-size: 20px;
+      }
+
+      @media (max-width: 768px) {
+        .org-chart {
+          flex-direction: column;
+          gap: 25px;
+        }
+        .horizontal-connector {
+          width: 3px;
+          height: 30px;
+        }
+        .circle-node {
+          min-width: 240px;
+        }
+      }
+    </style>
+
+    <div class="inside-gender-container">
+      <!-- الهيكل التنظيمي المركزي -->
+      <div class="org-chart">
+        <!-- الدائرة اليسرى - الداخل -->
+        <div class="circle-node side-circle">
+          <div class="icon">
+            <svg viewBox="0 0 24 24" class="icon-svg" style="width: 42px; height: 42px;">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </svg>
+          </div>
+          <div class="label">إناث</div>
+          <div class="number">78,343</div>
+          <div class="percent">47%</div>
+        </div>
+
+        <!-- الخط الأفقي -->
+        <div class="horizontal-connector"></div>
+
+        <!-- الدائرة المركزية -->
+        <div class="circle-node main-circle">
+          <div class="icon">
+            <svg viewBox="0 0 24 24" class="icon-svg" style="width: 50px; height: 50px;">
+              <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+            </svg>
+          </div>
+          <div class="label">إجمالي الحجاج</div>
+          <div class="number">166,645</div>
+          <div class="text">حاج/حاجة</div>
+        </div>
+
+        <!-- الخط الأفقي -->
+        <div class="horizontal-connector"></div>
+
+        <!-- الدائرة اليمنى - الخارج -->
+        <div class="circle-node side-circle">
+          <div class="icon">
+            <svg viewBox="0 0 24 24" class="icon-svg" style="width: 42px; height: 42px;">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </svg>
+          </div>
+          <div class="label">الذكور</div>
+          <div class="number">88,311</div>
+          <div class="percent">53%</div>
+        </div>
+      </div>
+
+      <div class="header-box">
+        <div class="header-text">من بين كل <strong>100</strong> حاج من حجاج الداخل لعام <strong>1446هـ</strong>: يوجد <strong>53</strong> حاجاً من الذكور</div>
+      </div>
+    </div>
+  `;
+}
+    function SeventhPage() {
+       const viewEl = document.getElementById('view');
+      viewEl.innerHTML = `
+       
+
+        <div class="org-structure">
+          <div class="level level-1">
+            <div class="node">
+              <div class="node-icon">
+                <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+              </div>
+              <div class="node-label">إجمالي حجاج الداخل</div>
+              <div class="node-number">166,645</div>
+                <div class="node-percent">10%</div>
+            </div>
+          </div>
+
+          <div class="vertical-line"></div>
+          <div class="connector-circle"></div>
+          <div class="branch-line"></div>
+
+          <div class="level level-2">
+            <div class="level-wrapper">
+              <div class="node">
+                <div class="node-icon">
+                  <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                </div>
+                <div class="node-label">إجمالي السعوديين</div>
+                <div class="node-number">112,991</div>
+                <div class="node-percent">68%</div>
+              </div>
+              
+              <div class="vertical-line"></div>
+              <div class="connector-circle"></div>
+              <div class="branch-line" style="width: 80%;"></div>
+              
+              <div class="level level-3">
+                <div class="node">
+                  <div class="node-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                  </div>
+                  <div class="node-label">الحجاج السعوديين من الذكور</div>
+                  <div class="node-number">53,479</div>
+                  <div class="node-percent">47%</div>
+
+                </div>
+                <div class="node">
+                  <div class="node-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                  </div>
+                  <div class="node-label">الحجاج السعوديين من الإناث</div>
+                  <div class="node-number">59,512</div>
+                  <div class="node-percent">53%</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="level-wrapper">
+              <div class="node">
+                <div class="node-icon">
+                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                </div>
+                <div class="node-label">إجمالي الغير سعوديين</div>
+                <div class="node-number">53,663</div>
+                <div class="node-percent">32%</div>
+
+              </div>
+              
+              <div class="vertical-line"></div>
+              <div class="connector-circle"></div>
+              <div class="branch-line" style="width: 80%;"></div>
+              
+              <div class="level level-3">
+                <div class="node">
+                  <div class="node-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                  </div>
+                  <div class="node-label">الحجاج الغير سعوديين من الذكور</div>
+                  <div class="node-number">34,832</div>
+                  <div class="node-percent">65%</div>
+                </div>
+                <div class="node">
+                  <div class="node-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                  </div>
+                  <div class="node-label">الحجاج الغير سعوديين من الإناث</div>
+                  <div class="node-number">18,831</div>
+                  <div class="node-percent">35%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+    <div class="header-box">
+        <div class="header-text">من بين كل <strong>100</strong> حاج من حجاج الداخل لعام <strong>1446هـ</strong>: يوجد <strong>68</strong> حاج سعودي، منهم 36 من الإناث </div>
+      </div>
+        </div>
+
+
+
+      `;
+    }
+
+    function EighthPage() {
+        viewEl.innerHTML = `
+    <style>
+      .org-chart {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        margin: 40px 0;
+        position: relative;
+        flex-wrap: wrap;
+      }
+
+      .horizontal-connector {
+        width: 60px;
+        height: 3px;
+        background: #dee2e6;
+        flex-shrink: 0;
+      }
+
+      .circle-node {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+        border-radius: 16px;
+        background: white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        min-width: 220px;
+        border: 2px solid #dee2e6;
+      }
+
+      .main-circle {
+        border-color: #495057;
+        border-width: 3px;
+        min-width: 260px;
+        padding: 24px 20px;
+      }
+
+      .side-circle {
+        min-width: 200px;
+      }
+
+      .circle-node .icon {
+        margin-bottom: 14px;
+      }
+
+      .circle-node .label {
+        font-size: 14px;
+        color: #6c757d;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .circle-node .number {
+        font-size: 26px;
+        font-weight: 700;
+        color: #212529;
+        direction: ltr;
+        font-feature-settings: "tnum";
+        margin-bottom: 6px;
+      }
+
+      .circle-node .text,
+      .circle-node .percent {
+        font-size: 15px;
+        color: #495057;
+        font-weight: 600;
+      }
+
+      .header-box {
+        background: linear-gradient(135deg, #495057 0%, #6c757d 100%);
+        padding: 25px 40px;
+        text-align: center;
+        border-radius: 10px;
+        margin-top: 40px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .header-text {
+        color: white;
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 1.7;
+      }
+
+      .header-text strong {
+        font-weight: 700;
+        font-size: 20px;
+      }
+
+      @media (max-width: 768px) {
+        .org-chart {
+          flex-direction: column;
+          gap: 25px;
+        }
+        .horizontal-connector {
+          width: 3px;
+          height: 30px;
+        }
+        .circle-node {
+          min-width: 240px;
+        }
+      }
+    </style>
+
+    <div class="inside-gender-container">
+      <!-- الهيكل التنظيمي المركزي -->
+      <div class="org-chart">
+        <!-- الدائرة اليسرى - الداخل -->
+        <div class="circle-node side-circle">
+          <div class="icon">
+            <svg viewBox="0 0 24 24" class="icon-svg" style="width: 42px; height: 42px;">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </svg>
+          </div>
+          <div class="label">إجمالي الذكور</div>
+          <div class="number">789,530</div>
+          <div class="percent">52%</div>
+        </div>
+
+        <!-- الخط الأفقي -->
+        <div class="horizontal-connector"></div>
+
+        <!-- الدائرة المركزية -->
+        <div class="circle-node main-circle">
+          <div class="icon">
+            <svg viewBox="0 0 24 24" class="icon-svg" style="width: 50px; height: 50px;">
+              <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+            </svg>
+          </div>
+          <div class="label">إجمالي حجاج الخارج</div>
+          <div class="number">1,506,576</div>
+          <div class="percent">90%</div>
+        </div>
+
+        <!-- الخط الأفقي -->
+        <div class="horizontal-connector"></div>
+
+        <!-- الدائرة اليمنى - الخارج -->
+        <div class="circle-node side-circle">
+          <div class="icon">
+            <svg viewBox="0 0 24 24" class="icon-svg" style="width: 42px; height: 42px;">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </svg>
+          </div>
+          
+          <div class="label">إجمالي الإناث</div>
+          <div class="number">717,036</div>
+          <div class="percent">48%</div>
+          
+        </div>
+      </div>
+
+      <div class="header-box">
+        <div class="header-text">من بين كل <strong>100</strong> حاج من حجاج الداخل لعام <strong>1446هـ</strong>: يوجد <strong>52</strong> حاجاً من الذكور</div>
+      </div>
+    </div>
+
+  `;
+    }
+
+    function NinthPage() {
+  viewEl.innerHTML = `
+    <div class="chart-card chart-card-line">
+      <div class="chart-title">توزيع حجاج الخارج وفقًا لوسيلة القُدوم والنوع لعام 1446هـ</div>
+      <div id="chart-transport"></div>
+      <div style="text-align:center; margin-top:12px; font-size:14px; color:#495057;">
+        من بين كل 100 حاج من حجاج الخارج قدم 95 حاج جوًا في موسم حج 1446هـ.
+      </div>
+    </div>
+  `;
+
+  const totalOutside = 1506576;
+
+  setTimeout(() => {
+    Highcharts.chart('chart-transport', {
+      chart: { type: 'column', height: 420 },
+      title: { text: null },
+      xAxis: {
+        categories: ['نقل جوي', 'نقل بري', 'نقل بحري'],
+        labels: {
+          formatter: function() {
+            if (this.value === 'نقل جوي') {
+              return `${this.value}</span>`;
+            }
+            return this.value;
+          },
+          useHTML: true,
+          style: { fontSize: '13px' }
+        }
+      },
+      yAxis: {
+        title: { text: null },
+        labels: { enabled: false }
+      },
+      plotOptions: {
+        column: {
+          grouping: true,
+          pointPadding: 0.15,
+          borderWidth: 0,
+          dataLabels: {
+            enabled: true,
+            useHTML: true,
+            formatter: function() {
+              const value = this.y;
+              const pct = ((value / totalOutside) * 100).toFixed(2);
+              const isAirTransport = this.point.index === 0; // ← "نقل جوي" فقط
+
+              // تنسيق خاص لـ "نقل جوي"
+              if (isAirTransport) {
+                return `<div style="font-weight:700; color:#212529; font-size:13px;">
+                        ${value.toLocaleString()}&nbsp;<span style="font-size:11px; color:#495057;">%${pct}</span>
+                      </div>`;
+              }
+
+              // التنسيق العادي للبقية
+              return `<div style="font-weight:700; color:#212529; font-size:13px;">
+                        ${value.toLocaleString()}&nbsp;<span style="font-size:11px; color:#495057;">%${pct}</span>
+                      </div>`;
+            },
+            style: { textOutline: 'none' },
+            y: -25,
+            verticalAlign: 'top'
+          }
+        }
+      },
+      tooltip: {
+        headerFormat: '<span style="font-size:14px">{point.x}</span><br/>',
+        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.2f}%)<br/>'
+      },
+      series: [
+        {
+          name: 'إناث',
+          color: '#ffe0b2',
+          data: [684828, 29955, 2263]
+        },
+        {
+          name: 'ذكور',
+          color: '#495057',
+          data: [750189, 36510, 2831]
+        }
+      ],
+      legend: {
+        align: 'center',
+        verticalAlign: 'bottom',
+        layout: 'horizontal',
+        itemStyle: { fontSize: '13px' }
+      },
+      credits: { enabled: false }
+    });
+  }, 40);
+}
+
+function TenthPage(){
+ viewEl.innerHTML = `
+  <div class="chart-card chart-card-line">
+    <div class="chart-title">توزيع أعداد حجاج الخارج وفقًا لمجموعات الدول لعام 1446هـ</div>
+    <div id="chart-country"></div>
+    <div style="text-align:center; margin-top:12px; font-size:14px; color:#495057;">
+      من كل 10 حجاج من الخارج هناك 6 حجاج من الدول الآسيوية غير العربية في عام 1446هـ.
+    </div>
+  </div>
+`;
+
+setTimeout(() => {
+  Highcharts.chart('chart-country', {
+    chart: { type: 'column', height: 420 },
+    title: { text: null },
+    xAxis: {
+      categories: [
+        'أمريكا وأستراليا',
+        'مجلس التعاون',
+        'أوروبا',
+        'إفريقيا غير العربية',
+        'الدول العربية (غير الخليج)',
+        'آسيا غير العربية'
+      ],
+      labels: {
+        rotation: 0,
+        style: { fontSize: '14px', fontFamily: "'Almarai', sans-serif" },
+        y: 20
+      },
+      tickLength: 0
+    },
+    yAxis: {
+      title: { text: null },
+      labels: { enabled: false },
+      gridLineWidth: 0
+    },
+    plotOptions: {
+      column: {
+        borderRadius: 4,
+        pointPadding: 0.12,
+        borderWidth: 0,
+        colorByPoint: true,
+        colors: ['#ced4da', '#ced4da', '#ced4da', '#ced4da', '#ced4da', '#ced4da'],
+        dataLabels: {
+          enabled: true,
+          formatter: function() {
+            const total = 1506576;
+            const pct = ((this.y / total) * 100).toFixed(1);
+            return `<div style="font-weight:700; color:#212529;">${this.y.toLocaleString()}</div>
+                    <div style="font-size:10px; color:#495057;">%${pct}</div>`;
+          },
+          style: { fontSize: '11px', textOutline: 'none' },
+          y: -10,
+          verticalAlign: 'top'
+        }
+      }
+    },
+    tooltip: {
+      backgroundColor: 'rgba(255,255,255,0.96)',
+      borderColor: '#ddd',
+      borderRadius: 6,
+      style: { color: '#333', fontSize: '13px', fontFamily: "'IBM Plex Sans Arabic', sans-serif" },
+      headerFormat: '<span style="font-size:14px">{point.x}</span><br/>',
+      pointFormat: '<b>{point.y}</b> حاج<br/>%{point.percentage:.1f} من إجمالي حجاج الخارج'
+    },
+    series: [{
+      name: 'عدد الحجاج',
+      data: [466, 37507, 33044, 196542, 334657, 904360],
+      showInLegend: false
+    }],
+    legend: { enabled: false },
+    credits: { enabled: false }
+  });
+}, 40);
+
+}
+
+
+    function eleventhPage() {
+      viewEl.innerHTML = `
+        <div class="chart-card chart-card-line">
+          <div class="chart-title">عدد زوّار مجمّع الملك عبدالعزيز لكسوة الكعبة (1445–1446هـ)</div>
+          <div id="chart-visitors"></div>
+          <div style="display:flex;justify-content:center;gap:20px;margin-top:12px;font-size:14px">
+            <div style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;border-radius:50%;background:#495057;display:inline-block"></span>1446</div>
+            <div style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;border-radius:50%;background:#adb5bd;display:inline-block"></span>1445</div>
+          </div>
+        </div>
+      `;
+
+      const months = ['محرم','صفر','ربيع الأول','ربيع الثاني','جمادى الأولى','جمادى الثانية','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'];
+      const data1446 = [4299,3922,5879,8572,10967,13520,14301,10393,2186,2210,2387,4359];
+      const data1445 = [572,527,50,1982,3544,768,4742,2613,2186,2210,2387,4359];
+
+      setTimeout(() => {
+        Highcharts.chart('chart-visitors', {
+          chart: { type: 'line', height: 350 },
+          title: { text: null },
+          xAxis: { categories: months },
+          yAxis: { title: { text: null }, labels: { enabled: false } },
+          plotOptions: {
+            line: {
+              lineWidth: 3,
+              marker: { radius: 4, symbol: 'circle' },
+              dataLabels: {
+                enabled: true,
+                formatter() { return this.y; },
+                style: { fontWeight: '700', fontSize: '12px', textOutline: 'none' },
+                y: -10
+              }
+            }
+          },
+          series: [
+            { name: '1446هـ', data: data1446, color: '#495057' },
+            { name: '1445هـ', data: data1445, color: '#adb5bd' }
+          ],
+          tooltip: { enabled: false }
+        });
+      }, 40);
+    }
+
+    function init() {
+      buildDots();
+      goTo(0);
+      startAuto();
+      startBar();
+    }
+    init();
+  </script>
+</body>
+</html>

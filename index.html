@@ -22,22 +22,8 @@
       align-items: center;
       justify-content: flex-start;
     }
-    .header-pill {
-      width: 100%;
-      max-width: 1670px;
-      background: #4a4a49;
-      color: #fff;
-      text-align: center;
-      padding: 18px 20px;
-      font-size: 26px;
-      font-weight: 700;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      letter-spacing: 0.3px;
-      margin-bottom: 20px;
-      margin-left: 0;
-      margin-right: 100px; 
-    }
+  
+
     .frame {
       width: 100%;
       max-width: 1800px;
@@ -818,32 +804,49 @@
       background: #dee2e6;
       margin: 2px auto;
     }
+ /* الغلاف العام */
+.header-wrapper {
+  position: relative;
+  width: 97vw; /* ← يمتد لعرض الشاشة الكامل */
+  left: 50%;
+  right: 0%;
+  margin-left: -50vw; /* ← يلغي هوامش الحاويات */
+  margin-right: -50vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
 
-    .logo-container {
-    position: absolute;
-    top: 29px;    /* نفس padding-top لـ body */
-    right: 80px;  /* ← هذا يجعله على اليمين الفعلي في الشاشة */
-    z-index: 10;
-    pointer-events: none; /* اختياري: لتجنب التداخل مع النقر */
-    }
+/* الهيدر نفسه */
+.header-pill {
+  flex: 1;
+  background: #4a4a49;
+  color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 40px;
+  max-width: none; /* ← ألغِ أي تقييد للعرض */
+  width: 100%; /* ← اجعل الهيدر يملأ كل الشاشة */
+}
 
-    .logo {
-    height: clamp(32px, 4.5vw, 50px);
-    width: auto;
-    max-width: 180px;
-    margin-bottom: 40px;
-   }
+/* العنوان داخل الهيدر */
+.header-pill #headerTitle {
+  font-size: clamp(18px, 2.2vw, 26px);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-align: center;
+}
 
-.source-attribution {
-  margin-top: 8px;
-  padding-top: 8px;
-  padding-right: 8px;
-  border-top: 1px solid #e9e9e9;
-  text-align: right;
-  font-size: 16px;
-  color: #6c757d;
-  font-weight: 500;
-  direction: rtl;
+/* الشعار */
+.logo-outside {
+  height: clamp(40px, 5vw, 70px);
+  width: auto;
+  object-fit: contain;
 }
     /* Responsive Design */
     @media (max-width: 1400px) {
@@ -1219,10 +1222,13 @@
 </head>
 <body>
 
-<div class="logo-container">
-  <img src="mathabh-logo.png" alt="شعار" class="logo">
+  <div class="header-wrapper">
+  <img src="/Users/najlaa/Desktop/Hajj Conference Presentation/mathabh-logo.png" alt="شعار المجمع" class="logo-outside" />
+  <div class="header-pill">
+    <span id="headerTitle">إحصائيات الحجاج</span>
+  </div>
 </div>
-<div class="header-pill" id="dynamicHeader">إحصائيات الحجاج</div>
+
   <div class="frame" >
 
     <div id="view" class="view fade-in"></div>
@@ -1291,11 +1297,14 @@
         d.onclick = () => {goTo(i);if (paused) {togglePause();}resetProgress();};
         dotsEl.appendChild(d);});}
 
-    function updateUI() {
-      titleEl.textContent = views[current].title;
-      dynamicHeader.textContent = views[current].title;
-      [...dotsEl.children].forEach((d, i) => d.classList.toggle('active', i === current));}
+const headerTitleEl = document.getElementById('headerTitle'); // ← جديد
 
+    function updateUI() {
+titleEl.textContent = views[current].title;
+  headerTitleEl.textContent = views[current].title;
+  [...dotsEl.children].forEach((d, i) => d.classList.toggle('active', i === current));
+    }
+    
     function goTo(i) {
       current = i % views.length;
       viewEl.classList.remove('fade-in');
@@ -1729,7 +1738,7 @@ function SixthPage() {
         <!-- الدائرة اليسرى - الداخل -->
         <div class="circle-node side-circle">
           <div class="icon">
-            <svg viewBox="0 0 48 48" class="icon-svg" style="width: 42px; height: 42px;">
+            <svg viewBox="0 0 48 48" class="icon-svg" style="width: 42px; height: 42px;margin-top: 25px;">
             <path d="m18.74767 50.591a16.91591 16.91591 0 0 0 12.07886-.77515c2.4212-.93351 4.69871-3.666 7.24519-4.9307a13.285 13.285 0 0 1 8.97844-1.19488 5.86229 5.86229 0 0 0 1.21651-3.671c-.08608-4.97366-2.32532-12.66025-2.34687-12.73561a1.3563 1.3563 0 0 1 -.043-.30147v-7.20211c-1.61487-16.7512-13.81221-15.79308-14.32893-15.73923h-.21532c-4.864-.48631-15.35766 3.18864-14.32873 20.83142a39.848 39.848 0 0 0 -1.109 7.29884c-.11534 3.26129 1.24644 12.02424 11.336 12.5312a1.07708 1.07708 0 0 1 -.03224 2.153 13.13552 13.13552 0 0 1 -12.62787-9.31213c-2.07771 4.20662-2.45889 11.06151 4.17696 13.04782zm7.71885-18.07533c-3.91866-4.16625-4.12315-11.89588-4.12315-11.91743a15.65762 15.65762 0 0 1 .38755-3.13273 23.11728 23.11728 0 0 1 17.44013.043 15.62573 15.62573 0 0 1 .366 3.03588c0 .07536-.20454 7.805-4.1232 11.97124a6.96 6.96 0 0 1 -9.94733 0z"/></svg>
             </svg>
           
@@ -1745,7 +1754,7 @@ function SixthPage() {
         <!-- الدائرة المركزية -->
         <div class="circle-node main-circle">
           <div class="icon">
-          <svg viewBox="0 0 512 512" class="icon-svg" style="width: 50px; height: 50px;">
+          <svg viewBox="0 0 512 512" class="icon-svg" style="width: 50px; height: 50px;margin-top: 25px;">
   <circle cx="135.307" cy="42.478" r="42.478"/>
   <path d="M140.619,471.349v16.055c0,13.584,11.013,24.596,24.596,24.596c13.584,0,24.596-11.012,24.596-24.596v-16.055H140.619z"/>
   <path d="M80.808,471.349v16.055c0,13.584,11.013,24.596,24.596,24.596s24.596-11.012,24.596-24.596v-16.055H80.808z"/>
@@ -1770,7 +1779,7 @@ function SixthPage() {
         <!-- الدائرة اليمنى - الخارج -->
         <div class="circle-node side-circle">
           <div class="icon">
-            <svg viewBox="0 0 48 48" class="icon-svg" style="width: 42px; height: 42px;">
+            <svg viewBox="0 0 48 48" class="icon-svg" style="width: 42px; height: 42px;margin-top: 25px;">
             <path d="m36.7 24.13a28.273 28.273 0 0 0 -8.53-3.67 13.457 13.457 0 0 0 4.83-9.75 8.872 8.872 0 0 0 -9-8.71 8.872 8.872 0 0 0 -9 8.71 13.457 13.457 0 0 0 4.83 9.75 28.273 28.273 0 0 0 -8.53 3.67 6.815 6.815 0 0 0 -3.3 5.87v15a1 1 0 0 0 1 1h30a1 1 0 0 0 1-1v-14.92a6.978 6.978 0 0 0 -3.3-5.95zm-19.7-13.42a5.534 5.534 0 0 1 .04-.71h13.92a5.534 5.534 0 0 1 .04.71c0 3.67-3.14 9.29-7 9.29s-7-5.62-7-9.29zm21 33.29h-4v-11a1 1 0 0 0 -2 0v.64c-7.34-2.43-12.7-8.21-14.52-10.38a17.294 17.294 0 0 1 6.52-1.26c2.63 0 6.08.46 11.67 3.84a4.969 4.969 0 0 1 2.33 4.24z"/></svg>
 
             </svg>

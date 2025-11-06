@@ -2150,7 +2150,7 @@ function SixthPage() {
   `;
     }
 
-    function NinthPage() {
+   function NinthPage() {
   viewEl.innerHTML = `
     <div class="chart-card chart-card-line">
       <div class="chart-title">توزيع حجاج الخارج وفقًا لوسيلة القُدوم والنوع لعام 1446هـ</div>
@@ -2163,7 +2163,7 @@ function SixthPage() {
       chart: { type: 'column', height: 590 },
       title: { text: null },
       xAxis: {
-        categories: ['نقل بري', 'نقل بحري','نقل جوي'],
+        categories: ['نقل بحري','نقل بري','نقل جوي'],
         labels: {
           formatter: function() {
             if (this.value === 'نقل جوي') {
@@ -2180,7 +2180,7 @@ function SixthPage() {
           borderWidth: 0,
           dataLabels: {enabled: true,useHTML: true,
             formatter: function() {const value = this.y;
-              const pct = ((value / totalOutside) * 100).toFixed(2);
+const pct = this.point.customPercentage.toFixed(1);
               const isAirTransport = this.point.index === 0; // ← "نقل جوي" فقط
               if (isAirTransport) {return `<div style="font-weight:700; color:#212529; font-size:14px;">
                         ${value.toLocaleString()}&nbsp;<span style="font-size:11px; color:#495057;">%${pct}</span></div>`;}
@@ -2194,25 +2194,32 @@ function SixthPage() {
    series: [
   {
     name: 'إناث',
-    data: [2263, 29955, 684828],
+data: [
+      { y: 2263, customPercentage: 44.4},
+      { y: 29955,  customPercentage: 45.0 },
+      { y: 684828,   customPercentage: 47.7 }
+    ],    color: {
+      linearGradient: { x1: 1, y1: 0, x2: 0, y2: 0 },
+         stops: [
+        [0, '#c5ad68'], // اليمين
+      [0.5, '#f3dc8a'],  // اليسار
+      [1, '#c5ad68'], // اليمين
+      ]
+    }
+  },
+  {
+    name: 'ذكور',
+    data: [
+      { y: 2831, customPercentage: 55.5 },
+      { y: 36510,  customPercentage: 54.9 },
+      { y: 750189,   customPercentage: 52.2 }
+    ],
     color: {
       linearGradient: { x1: 1, y1: 0, x2: 0, y2: 0 },
       stops: [
         [0,   '#9d9e9d'],   // يمين: رمادي ناعم
         [0.5, '#d6d7d6'],   // وسط: أبيض
         [1,   '#9d9e9d']    // يسار: رمادي فاتح جداً
-      ]
-    }
-  },
-  {
-    name: 'ذكور',
-    data: [2831, 36510, 750189],
-    color: {
-      linearGradient: { x1: 1, y1: 0, x2: 0, y2: 0 },
-      stops: [
-        [0, '#c5ad68'], // اليمين
-      [0.5, '#f3dc8a'],  // اليسار
-      [1, '#c5ad68'], // اليمين
       ]
     }
         }

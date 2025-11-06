@@ -481,7 +481,7 @@
       align-items: center;
       gap: 12px;
       margin-top: 30px;
-      padding-top: 12px;
+      padding-top: 8px;
       border-top: 1px solid #e9e9e9;
     }
     
@@ -545,7 +545,7 @@
       background: #e0e0e0;
       border-radius: 999px;
       overflow: hidden;
-      margin-top: 12px;
+      margin-top: 8px;
     }
     
     .progress-fill {
@@ -804,50 +804,53 @@
       background: #dee2e6;
       margin: 2px auto;
     }
- /* الغلاف العام */
-.header-wrapper {
-  position: relative;
-  width: 93.5vw; /* ← يمتد لعرض الشاشة الكامل */
-  left: 50%;
-  right: 0%;
-  margin-left: -50vw; /* ← يلغي هوامش الحاويات */
-  margin-right: -50vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  margin-bottom: 20px;
+
+ .header-wrapper {
+  width: 100%;
+  max-width: 1670px;
+  margin: 0 auto;
+  padding: 0 10px;
 }
 
-/* الهيدر نفسه */
 .header-pill {
-  flex: 1;
-  background: #4a4a49;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 96%;
+  background: #495057;
   color: #fff;
+  text-align: center;
+  padding-right: 10px;
+  font-size: 26px;
+  font-weight: 700;
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 18px 40px;
-  max-width: none; /* ← ألغِ أي تقييد للعرض */
-  width: 100%; /* ← اجعل الهيدر يملأ كل الشاشة */
+  letter-spacing: 0.3px;
+  margin-bottom: 15px;
 }
 
-/* العنوان داخل الهيدر */
-.header-pill #headerTitle {
-  font-size: clamp(18px, 2.2vw, 26px);
-  font-weight: 700;
-  letter-spacing: 0.3px;
+.header-pill span {
+  flex: 1;
   text-align: center;
 }
 
-/* الشعار */
-.logo-outside {
-  height: clamp(40px, 5vw, 70px);
+.logo-right {
+  height: clamp(32px, 4.5vw, 50px);
   width: auto;
-  object-fit: contain;
+  max-width: 180px;
+  margin-left: 18px; /* ← يفصل بين النص واللوغو */
 }
+
+.source-attribution {
+  padding-top: 14px;
+  border-top: 1px solid #e9e9e9;
+  text-align: right;
+  font-size: 14px;
+  color: #6c757d;
+  font-weight: 500;
+  direction: rtl;
+}
+
     /* Responsive Design */
     @media (max-width: 1400px) {
       .frame {
@@ -1222,17 +1225,15 @@
 </head>
 <body>
 
-  <div class="header-wrapper">
-  <img src="mathabh-logo.png" alt="شعار المجمع" class="logo-outside" />
   <div class="header-pill">
-    <span id="headerTitle">إحصائيات الحجاج</span>
-  </div>
+  <img src="Picture1.svg" alt="شعار المجمع" class="logo-inside" />
+  <span id="headerTitle">إحصائيات الحجاج</span>
 </div>
 
   <div class="frame" >
 
     <div id="view" class="view fade-in"></div>
-                <div class="source-attribution">المصدر: الهيئة العامة للإحصاء</div>
+     <div class="source-attribution">المصدر: الهيئة العامة للإحصاء</div>
 
     <div class="controls">
       <div class="view-info">
@@ -1357,7 +1358,7 @@ titleEl.textContent = views[current].title;
       legend: {enabled: true,
         align: 'center',verticalAlign: 'bottom',layout: 'horizontal',
         itemStyle: {fontSize: '14px',fontWeight: 'normal'},
-        symbolRadius: 7,symbolHeight: 10,symbolWidth: 10,y: 19},
+        symbolRadius: 7,symbolHeight: 10,symbolWidth: 10,y: 15},
       plotOptions: { area: {animation: {duration: 8000}, fillOpacity: 0.4,lineWidth: 2, marker: { enabled: true, radius: 3 }}},
           series: [
             { name: 'حجاج الداخل', data: [592368,629710,700603,724229,746511,679008,699313,989798,1099522,1408641,600718,696185,567876,537537,600108,612953,634379,1000,58745,144653,184130,221854,166654], color: {linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },stops: [[0, '#9e9f9e'],[1, 'rgba(158, 159, 158, 0.1)']]} },

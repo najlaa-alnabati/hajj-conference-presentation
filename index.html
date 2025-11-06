@@ -2163,7 +2163,7 @@ function SixthPage() {
       chart: { type: 'column', height: 590 },
       title: { text: null },
       xAxis: {
-        categories: ['نقل جوي', 'نقل بري', 'نقل بحري'],
+        categories: ['نقل بري', 'نقل بحري','نقل جوي'],
         labels: {
           formatter: function() {
             if (this.value === 'نقل جوي') {
@@ -2194,7 +2194,7 @@ function SixthPage() {
    series: [
   {
     name: 'إناث',
-    data: [684828, 29955, 2263],
+    data: [2263, 29955, 684828],
     color: {
       linearGradient: { x1: 1, y1: 0, x2: 0, y2: 0 },
       stops: [
@@ -2206,7 +2206,7 @@ function SixthPage() {
   },
   {
     name: 'ذكور',
-    data: [750189, 36510, 2831],
+    data: [2831, 36510, 750189],
     color: {
       linearGradient: { x1: 1, y1: 0, x2: 0, y2: 0 },
       stops: [

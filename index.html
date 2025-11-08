@@ -176,7 +176,7 @@
     .node-number{font-size:28px;font-weight:800;color:var(--text);direction:ltr;}
     .node-text{font-size:16px;color:var(--muted);margin-top:3px;}
     .node-percent{font-size:20px;font-weight:800;color:var(--brand);margin-top:3px;}
-    .vertical-line{width:2px;height:8px;background:var(--line);margin:0 auto;}
+    .vertical-line{margin-top:-8px;;width:2px;height:8px;background:var(--line);margin:0 auto;}
     .connector-circle{width:16px;height:16px;background:#fff;border:2px solid var(--line);border-radius:50%;margin:0 auto;}
     .branch-line{width:70%;height:2px;background:var(--line);margin:2px auto;}
 
@@ -758,7 +758,7 @@
 function SeventhPage() {
   const viewEl = document.getElementById('view');
   viewEl.innerHTML = `
-    <div class="org-structure" style="height: 670px; margin-top:50px;">
+    <div class="org-structure" style=" margin-top:30px;">
       <!-- المستوى 1 -->
       <div class="level level-1">
         <div class="node">
@@ -768,15 +768,16 @@ function SeventhPage() {
                 <path d="M20.419,12.449c-2.364-.223-3.284-1.899-4.129-3.772-.625-1.39-2.137-3.394-3.885-3.321C10.859,5.42,9.789,4.73,8.727,3.821 6.886,2.245,4.955,1.098,2.499,2.706c.781,1.082.111,2.322-1.4,2.476-.43.043-.881-.27-1.013.479C-0.01,6.194-.166,6.579.522,6.856c.316.13.534.608.705.969 1.053,2.222,3.338,3.78,3.48,6.51.016.325.419.762.75.915.734.338.958.998,1.327,1.604.545.895,1.185,1.733,2.167,3.148-.226-1.91.724-1.576,1.443-1.561.71.016,1.465,0,2.113.235.557.205.857.16,1.124-.311.604-1.073,1.668-1.373,2.737-1.419 1.523-.064,2.876-.653,4.279-1.103 1.238-.398,1.21-1.576,1.282-2.512.063-.819-.942-.716-1.52-.769z" fill="#fff"/>
               </svg>
           </div>
-          <div class="node-label">إجمالي حجاج الداخل</div>
-          <div class="node-number">166,645</div>
-          <div class="node-percent">10%</div>
+         <div class="node-label">إجمالي الحجاج</div>
+          <div class="node-number">1,673,230</div>
+          <div class="node-text">حاج/حاجة</div>
         </div>
       </div>
-
-      <div class="vertical-line"></div>
-      <div class="connector-circle"></div>
+      <div class="vertical-line" style="margin-top:-8px;"></div>
+      <div class="connector-circle" style="margin-top:-7px;"></div>
       <div class="branch-line"></div>
+
+
 
       <div class="level level-2">
         <!-- إجمالي السعوديين -->

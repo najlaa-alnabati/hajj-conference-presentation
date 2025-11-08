@@ -53,14 +53,15 @@
       overflow:hidden;
       display:flex;
       flex-direction:column;
+      position:relative;
     }
 
     /* رأس علوي كبسولة */
     .header-pill{
+      position:relative;
       display:flex;
       align-items:center;
-      justify-content:center;
-      gap:16px;
+      justify-content:center; /* العنوان في الوسط */
       background:var(--brand);
       color:#fff;
       height:72px; /* ثابت ليتماشى مع 1080 */
@@ -68,8 +69,13 @@
       font-size:26px;
       font-weight:800;
     }
+    /* اللوقو يمين */
     .header-pill .logo-inside{
-      height:42px;
+      position:absolute;
+      right:16px;
+      top:50%;
+      transform:translateY(-50%);
+      height:48px; /* أكبر شوي */
       width:auto;
     }
 
@@ -193,15 +199,14 @@
     .header-text{color:#404042;font-size:22px;font-weight:500;line-height:1.7;}
     .header-text strong{font-weight:800;font-size:24px;}
 
-    /* لأننا داخل لوح ثابت، نضبط ارتفاعات الرسوم لتناسب 1080 */
+    /* رفع ارتفاع الرسوم */
     .hc-700{height:700px;}
-    .hc-640{height:640px;}
+    .hc-640{height:760px;}  /* كانت 640 → 760 */
     .hc-600{height:600px;}
-    .hc-590{height:590px;}
+    .hc-590{height:700px;}  /* كانت 590 → 700 */
     .hc-560{height:560px;}
     .hc-520{height:520px;}
 
-    /* لا نحتاج ميديا كبيرة لأن القياس ثابت، لكن نُحسّن قليلاً إذا تم تصغير اللوح */
     @media (max-height: 760px){
       .header-pill{height:60px;font-size:22px;}
       .stat-item{min-width:320px;height:90px;}
@@ -214,6 +219,7 @@
     <!-- لوح 1920×1080 -->
     <div id="stage" class="stage-1920x1080">
       <div class="header-pill">
+        <!-- اللوقو صار يمين -->
         <img src="mathabh-logo-white.svg" alt="شعار المجمع" class="logo-inside" />
         <span id="headerTitle">إحصائيات الحجاج</span>
       </div>
@@ -235,9 +241,7 @@
   </div>
 
   <script>
-    /* ====== مقياس تلقائي لملاءمة اللوح داخل أي نافذة ======
-       لا يغيّر القياسات الداخلية، فقط يطبّق transform: scale
-    */
+    /* ====== مقياس تلقائي لملاءمة اللوح داخل أي نافذة ====== */
     (function autoScaleStage(){
       const stage = document.getElementById('stage');
       function fit(){
@@ -340,14 +344,14 @@
     pauseBtn.addEventListener('click', togglePause);
 
     /* =========================================================
-       الصفحات / الدوال (كلها مهيأة لارتفاعات مناسبة لـ 1080p)
+       الصفحات / الدوال (ارتفاعات أكبر)
        ========================================================= */
 
     function FirstPage(){
       viewEl.innerHTML = '<div id="chartTotal" class="hc-640"></div>';
       setTimeout(()=>{
         Highcharts.chart('chartTotal', {
-          chart:{ type:'area', height:640 },
+          chart:{ type:'area', height:760 }, /* كان 640 */
           title:{ text:'تطور أعداد حجاج الداخل والخارج والإجمالي خلال الفترة من 1424هـ إلى 1446هـ', style:{ fontSize:'20px', fontWeight:'800' }},
           xAxis:{ categories,
             plotBands:[{ from:16.5, to:18.5, color:'rgba(203,203,203,.16)', label:{ text:'جائحة كورونا', style:{ color:'#313632', fontWeight:'800' }}}]
@@ -376,7 +380,7 @@
       viewEl.innerHTML = '<div id="chartOutside" class="hc-640"></div>';
       setTimeout(()=>{
         Highcharts.chart('chartOutside', {
-          chart:{ type:'area', height:640 },
+          chart:{ type:'area', height:760 }, /* كان 640 */
           title:{ text:'تطور أعداد حجاج الخارج خلال الفترة من 1424هـ إلى 1446هـ', style:{ fontSize:'20px', fontWeight:'800' } },
           xAxis:{ categories,
             plotBands:[{ from:16.5, to:18.5, color:'rgba(203,203,203,.16)', label:{ text:'جائحة كورونا', style:{ color:'#313632', fontWeight:'800' }}}]
@@ -397,7 +401,7 @@
       viewEl.innerHTML = '<div id="chartInside" class="hc-640"></div>';
       setTimeout(()=>{
         Highcharts.chart('chartInside', {
-          chart:{ type:'area', height:640 },
+          chart:{ type:'area', height:760 }, /* كان 640 */
           title:{ text:'تطور أعداد حجاج الداخل خلال الفترة من 1424هـ إلى 1446هـ', style:{ fontSize:'20px', fontWeight:'800' } },
           xAxis:{ categories,
             plotBands:[{ from:16.5, to:18.5, color:'rgba(203,203,203,.16)', label:{ text:'جائحة كورونا', style:{ color:'#313632', fontWeight:'800' }}}]
@@ -749,7 +753,7 @@
       `;
       setTimeout(()=>{
         Highcharts.chart('chart-transport', {
-          chart:{ type:'column', height:590 },
+          chart:{ type:'column', height:700 }, /* كان 590 */
           title:{ text:null },
           xAxis:{
             categories:['نقل بحري','نقل بري','نقل جوي'],
@@ -806,7 +810,8 @@
       `;
       setTimeout(()=>{
         Highcharts.chart('chart-country', {
-          chart:{ type:'column', height:590 }, title:{ text:null },
+          chart:{ type:'column', height:700 }, /* كان 590 */
+          title:{ text:null },
           xAxis:{
             categories:['أمريكا وأستراليا','مجلس التعاون','أوروبا','إفريقيا غير العربية','الدول العربية (غير الخليج)','آسيا غير العربية'],
             labels:{ style:{ fontSize:'14px' }, y:20 }, tickLength:0
@@ -825,12 +830,6 @@
                 }
               }
             }
-          },
-          tooltip:{
-            backgroundColor:'rgba(255,255,255,0.96)', borderColor:'#ddd', borderRadius:6,
-            style:{ color:'#333', fontSize:'13px', fontFamily:"'Almarai',sans-serif" },
-            headerFormat:'<div style="font-size:12px;font-weight:800;margin-bottom:8px;">{point.x}</div>',
-            pointFormat:'<div style="font-size:12px;">{point.y} حاج<br><span style="font-size:12px;">%{point.percentage:.1f} من إجمالي حجاج الخارج</span></div>'
           },
           series:[{
             name:'عدد الحجاج',
@@ -854,7 +853,8 @@
       const data1445 = [572,527,50,1982,3544,768,4742,2613,2186,2210,2387,4359];
       setTimeout(()=>{
         Highcharts.chart('chart-visitors', {
-          chart:{ type:'line', height:590 }, title:{ text:null },
+          chart:{ type:'line', height:700 }, /* كان 590 */
+          title:{ text:null },
           xAxis:{ categories:months, labels:{ style:{ fontSize:'14px' } } },
           yAxis:{ title:{ text:null }, labels:{ enabled:false } },
           legend:{ enabled:true, align:'center', verticalAlign:'bottom', layout:'horizontal',

@@ -779,123 +779,243 @@
     </div>
   `;
 }
+function SeventhPage() {
+  const viewEl = document.getElementById('view');
+  viewEl.innerHTML = `
+    <div class="org-structure" style="height: 670px; margin-top:30px;">
+      <!-- المستوى 1 -->
+      <div class="level level-1">
+        <div class="node">
+          <div class="node-icon">
+            <!-- أيقونة رئيسية (زوج/زوجة كبيرة) - بيضاء وحجم 50px -->
+            <svg viewBox="0 0 21.933 21.933" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20.419,12.449c-2.364-.223-3.284-1.899-4.129-3.772-.625-1.39-2.137-3.394-3.885-3.321C10.859,5.42,9.789,4.73,8.727,3.821 6.886,2.245,4.955,1.098,2.499,2.706c.781,1.082.111,2.322-1.4,2.476-.43.043-.881-.27-1.013.479C-0.01,6.194-.166,6.579.522,6.856c.316.13.534.608.705.969 1.053,2.222,3.338,3.78,3.48,6.51.016.325.419.762.75.915.734.338.958.998,1.327,1.604.545.895,1.185,1.733,2.167,3.148-.226-1.91.724-1.576,1.443-1.561.71.016,1.465,0,2.113.235.557.205.857.16,1.124-.311.604-1.073,1.668-1.373,2.737-1.419 1.523-.064,2.876-.653,4.279-1.103 1.238-.398,1.21-1.576,1.282-2.512.063-.819-.942-.716-1.52-.769z" fill="#fff"/>
+              </svg>
+          </div>
+          <div class="node-label">إجمالي حجاج الداخل</div>
+          <div class="node-number">166,645</div>
+          <div class="node-percent">10%</div>
+        </div>
+      </div>
 
+      <div class="vertical-line"></div>
+      <div class="connector-circle"></div>
+      <div class="branch-line"></div>
 
-    function SeventhPage(){
-      viewEl.innerHTML = `
-        <div class="org-structure" style="margin-top:10px;">
-          <div class="level level-1">
-            <div class="node">
-              <div class="node-icon"><svg viewBox="0 0 24 24"><path fill="#fff" d="M12 2a5 5 0 0 1 5 5v3h-2V7a3 3 0 1 0-6 0v3H7V7a5 5 0 0 1 5-5Z"/></svg></div>
-              <div class="node-label">إجمالي حجاج الداخل</div>
-              <div class="node-number">166,645</div>
-              <div class="node-percent">10%</div>
+      <div class="level level-2">
+        <!-- إجمالي السعوديين -->
+        <div class="level-wrapper">
+          <div class="node">
+            <div class="node-icon">
+              <!-- أيقونة دائرية بسيطة - بيضاء 42px -->
+              <svg viewBox="0 0 21.933 21.933" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20.419,12.449c-2.364-.223-3.284-1.899-4.129-3.772-.625-1.39-2.137-3.394-3.885-3.321C10.859,5.42,9.789,4.73,8.727,3.821 6.886,2.245,4.955,1.098,2.499,2.706c.781,1.082.111,2.322-1.4,2.476-.43.043-.881-.27-1.013.479C-0.01,6.194-.166,6.579.522,6.856c.316.13.534.608.705.969 1.053,2.222,3.338,3.78,3.48,6.51.016.325.419.762.75.915.734.338.958.998,1.327,1.604.545.895,1.185,1.733,2.167,3.148-.226-1.91.724-1.576,1.443-1.561.71.016,1.465,0,2.113.235.557.205.857.16,1.124-.311.604-1.073,1.668-1.373,2.737-1.419 1.523-.064,2.876-.653,4.279-1.103 1.238-.398,1.21-1.576,1.282-2.512.063-.819-.942-.716-1.52-.769z" fill="#fff"/>
+              </svg>
             </div>
+            <div class="node-label">إجمالي السعوديين</div>
+            <div class="node-number">112,991</div>
+            <div class="node-percent">68%</div>
           </div>
 
           <div class="vertical-line"></div>
           <div class="connector-circle"></div>
-          <div class="branch-line"></div>
+          <div class="branch-line" style="width: 80%;"></div>
 
-          <div class="level level-2">
-            <div class="level-wrapper">
-              <div class="node">
-                <div class="node-icon"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="#fff"/></svg></div>
-                <div class="node-label">إجمالي السعوديين</div>
-                <div class="node-number">112,991</div>
-                <div class="node-percent">68%</div>
+          <div class="level level-3">
+            <!-- ذكور سعوديين -->
+            <div class="node">
+              <div class="node-icon">
+                <!-- أيقونة ذكور 48x48 - بيضاء 42px -->
+                <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+        <path d="m36.7 24.13a28.273 28.273 0 0 0 -8.53-3.67 13.457 13.457 0 0 0 4.83-9.75 8.872 8.872 0 0 0 -9-8.71 8.872 8.872 0 0 0 -9 8.71 13.457 13.457 0 0 0 4.83 9.75 28.273 28.273 0 0 0 -8.53 3.67 6.815 6.815 0 0 0 -3.3 5.87v15a1 1 0 0 0 1 1h30a1 1 0 0 0 1-1v-14.92a6.978 6.978 0 0 0 -3.3-5.95z" fill="#fff"/>
+      </svg>
               </div>
-
-              <div class="vertical-line"></div>
-              <div class="connector-circle"></div>
-              <div class="branch-line" style="width:80%"></div>
-
-              <div class="level level-3">
-                <div class="node">
-                  <div class="node-icon"><svg viewBox="0 0 48 48"><circle cx="24" cy="12" r="8"/></svg></div>
-                  <div class="node-label">الحجاج السعوديين من الذكور</div>
-                  <div class="node-number">53,479</div>
-                  <div class="node-percent">47%</div>
-                </div>
-                <div class="node">
-                  <div class="node-icon"><svg viewBox="0 0 64 64"><circle cx="32" cy="18" r="10"/></svg></div>
-                  <div class="node-label">الحجاج السعوديين من الإناث</div>
-                  <div class="node-number">59,512</div>
-                  <div class="node-percent">53%</div>
-                </div>
-              </div>
+              <div class="node-label">الحجاج السعوديين من الذكور</div>
+              <div class="node-number">53,479</div>
+              <div class="node-percent">47%</div>
             </div>
 
-            <div class="level-wrapper">
-              <div class="node">
-                <div class="node-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20z"/></svg></div>
-                <div class="node-label">إجمالي الغير سعوديين</div>
-                <div class="node-number">53,663</div>
-                <div class="node-percent">32%</div>
+            <!-- إناث سعوديات -->
+            <div class="node">
+              <div class="node-icon">
+                <!-- أيقونة إناث 64x64 - بيضاء 42px -->
+               <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                  <path d="m39.062 46.801c-2.892 1.602-4.686 3.946-7.353 4.973-6.033 2.65-13.623 2.434-18.043-1.754-.505-.307-1.137-1.957-1.453-1.281a9.528 9.528 0 0 0 -2.498 6.61v4.651h23.738a30.793 30.793 0 0 0 9.85-14.426 11.183 11.183 0 0 0 -4.242 1.227z" fill="#fff"/>
+                  <path d="m51.916 48.868a10.011 10.011 0 0 0 -6.362-3.251 32.555 32.555 0 0 1 -8.785 14.383h17.515v-4.651a9.66 9.66 0 0 0 -2.368-6.481z" fill="#fff"/>
+                  <path d="m18.748 50.591a16.916 16.916 0 0 0 12.079-.775c2.421-.934 4.699-3.666 7.245-4.931a13.285 13.285 0 0 1 8.978-1.195 5.862 5.862 0 0 0 1.217-3.671c-.086-4.974-2.325-12.66-2.347-12.736a1.356 1.356 0 0 1 -.043-.301v-7.202c-1.615-16.751-13.812-15.793-14.329-15.739h-.215c-4.864-.486-15.358 3.189-14.329 20.831a39.848 39.848 0 0 0 -1.109 7.299c-.115 3.261 1.246 12.024 11.336 12.531a1.077 1.077 0 0 1 -.032 2.153 13.136 13.136 0 0 1 -12.628-9.312c-2.078 4.207-2.459 11.062 4.177 13.048zm7.719-18.075c-3.919-4.166-4.123-11.896-4.123-11.917a15.658 15.658 0 0 1 .388-3.133 23.117 23.117 0 0 1 17.44.043 15.626 15.626 0 0 1 .366 3.036c0 .075-.205 7.805-4.123 11.971a6.96 6.96 0 0 1 -9.948 0z" fill="#fff"/>
+                </svg>
               </div>
-
-              <div class="vertical-line"></div>
-              <div class="connector-circle"></div>
-              <div class="branch-line" style="width:80%"></div>
-
-              <div class="level level-3">
-                <div class="node">
-                  <div class="node-icon"><svg viewBox="0 0 48 48"><circle cx="24" cy="12" r="8"/></svg></div>
-                  <div class="node-label">الحجاج الغير سعوديين من الذكور</div>
-                  <div class="node-number">34,832</div>
-                  <div class="node-percent">65%</div>
-                </div>
-                <div class="node">
-                  <div class="node-icon"><svg viewBox="0 0 64 64"><circle cx="32" cy="18" r="10"/></svg></div>
-                  <div class="node-label">الحجاج الغير سعوديين من الإناث</div>
-                  <div class="node-number">18,831</div>
-                  <div class="node-percent">35%</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="header-box">
-            <div class="header-text">من بين كل <strong>100</strong> حاج من حجاج الداخل لعام <strong>1446هـ</strong>: يوجد <strong>68</strong> حاج سعودي، منهم 36 من الإناث</div>
-          </div>
-        </div>
-      `;
-    }
-
-    function EighthPage(){
-      viewEl.innerHTML = `
-        <div class="inside-gender-container">
-          <div class="org-structure" style="margin-top:10px;">
-            <div class="level" style="gap:20px;">
-              <div class="node" style="min-width:280px;min-height:220px;">
-                <div class="node-icon"><svg viewBox="0 0 48 48"><circle cx="24" cy="12" r="8"/></svg></div>
-                <div class="node-label">إجمالي الإناث</div>
-                <div class="node-number">717,046</div>
-                <div class="node-percent">48%</div>
-              </div>
-
-              <div class="node" style="min-width:320px;min-height:240px;border-color:var(--brand);border-width:3px;">
-                <div class="node-icon"><svg viewBox="0 0 512 512"><circle cx="372" cy="44" r="42"/></svg></div>
-                <div class="node-label">إجمالي حجاج الخارج</div>
-                <div class="node-number">1,506,576</div>
-                <div class="node-percent">90%</div>
-              </div>
-
-              <div class="node" style="min-width:280px;min-height:220px;">
-                <div class="node-icon"><svg viewBox="0 0 48 48"><circle cx="24" cy="12" r="8"/></svg></div>
-                <div class="node-label">إجمالي الذكور</div>
-                <div class="node-number">789,530</div>
-                <div class="node-percent">52%</div>
-              </div>
-            </div>
-
-            <div class="header-box" style="margin-top:16px;">
-              <div class="header-text">من بين كل <strong>100</strong> حاج من حجاج الخارج لعام <strong>1446هـ</strong>: يوجد <strong>52</strong> حاجاً من الذكور</div>
+              <div class="node-label">الحجاج السعوديين من الإناث</div>
+              <div class="node-number">59,512</div>
+              <div class="node-percent">53%</div>
             </div>
           </div>
         </div>
-      `;
+
+        <!-- إجمالي الغير سعوديين -->
+        <div class="level-wrapper">
+          <div class="node">
+            <div class="node-icon">
+              <!-- أيقونة إجمالي (شخص) - بيضاء 42px -->
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                <circle cx="12" cy="7" r="5" fill="#ffffff"/>
+                <path d="M2 22v-3a7 7 0 0 1 7-7h6a7 7 0 0 1 7 7v3z" fill="#ffffff"/>
+              </svg>
+            </div>
+            <div class="node-label">إجمالي الغير سعوديين</div>
+            <div class="node-number">53,663</div>
+            <div class="node-percent">32%</div>
+          </div>
+
+          <div class="vertical-line"></div>
+          <div class="connector-circle"></div>
+          <div class="branch-line" style="width: 80%;"></div>
+
+          <div class="level level-3">
+            <!-- ذكور غير سعوديين -->
+            <div class="node">
+              <div class="node-icon">
+               <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+        <path d="m36.7 24.13a28.273 28.273 0 0 0 -8.53-3.67 13.457 13.457 0 0 0 4.83-9.75 8.872 8.872 0 0 0 -9-8.71 8.872 8.872 0 0 0 -9 8.71 13.457 13.457 0 0 0 4.83 9.75 28.273 28.273 0 0 0 -8.53 3.67 6.815 6.815 0 0 0 -3.3 5.87v15a1 1 0 0 0 1 1h30a1 1 0 0 0 1-1v-14.92a6.978 6.978 0 0 0 -3.3-5.95z" fill="#fff"/>
+      </svg>
+              </div>
+              <div class="node-label">الحجاج الغير سعوديين من الذكور</div>
+              <div class="node-number">34,832</div>
+              <div class="node-percent">65%</div>
+            </div>
+
+            <!-- إناث غير سعوديات -->
+            <div class="node">
+              <div class="node-icon">
+                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                  <path d="m39.062 46.801c-2.892 1.602-4.686 3.946-7.353 4.973-6.033 2.65-13.623 2.434-18.043-1.754-.505-.307-1.137-1.957-1.453-1.281a9.528 9.528 0 0 0 -2.498 6.61v4.651h23.738a30.793 30.793 0 0 0 9.85-14.426 11.183 11.183 0 0 0 -4.242 1.227z" fill="#fff"/>
+                  <path d="m51.916 48.868a10.011 10.011 0 0 0 -6.362-3.251 32.555 32.555 0 0 1 -8.785 14.383h17.515v-4.651a9.66 9.66 0 0 0 -2.368-6.481z" fill="#fff"/>
+                  <path d="m18.748 50.591a16.916 16.916 0 0 0 12.079-.775c2.421-.934 4.699-3.666 7.245-4.931a13.285 13.285 0 0 1 8.978-1.195 5.862 5.862 0 0 0 1.217-3.671c-.086-4.974-2.325-12.66-2.347-12.736a1.356 1.356 0 0 1 -.043-.301v-7.202c-1.615-16.751-13.812-15.793-14.329-15.739h-.215c-4.864-.486-15.358 3.189-14.329 20.831a39.848 39.848 0 0 0 -1.109 7.299c-.115 3.261 1.246 12.024 11.336 12.531a1.077 1.077 0 0 1 -.032 2.153 13.136 13.136 0 0 1 -12.628-9.312c-2.078 4.207-2.459 11.062 4.177 13.048zm7.719-18.075c-3.919-4.166-4.123-11.896-4.123-11.917a15.658 15.658 0 0 1 .388-3.133 23.117 23.117 0 0 1 17.44.043 15.626 15.626 0 0 1 .366 3.036c0 .075-.205 7.805-4.123 11.971a6.96 6.96 0 0 1 -9.948 0z" fill="#fff"/>
+                </svg>
+              </div>
+              <div class="node-label">الحجاج الغير سعوديين من الإناث</div>
+              <div class="node-number">18,831</div>
+              <div class="node-percent">35%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-box">
+        <div class="header-text">
+          من بين كل <strong>100</strong> حاج من حجاج الداخل لعام <strong>1446هـ</strong>: يوجد <strong>68</strong> حاج سعودي، منهم 36 من الإناث
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+
+
+function EighthPage() {
+  const viewEl = document.getElementById('view');
+  viewEl.innerHTML = `
+  <style>
+    .org-chart{
+      display:flex;align-items:center;justify-content:center;gap:40px;
+      flex-wrap:wrap;position:relative;margin:50px 0 20px; margin-top:70px;
     }
+    .horizontal-connector{width:60px;height:3px;background:#dee2e6;flex-shrink:0;}
+    .circle-node{
+      display:flex;flex-direction:column;align-items:center;text-align:center;
+      padding:20px;border-radius:16px;background:#fff;
+      box-shadow:0 4px 12px rgba(0,0,0,.08);
+      min-width:290px;min-height:340px;border:2px solid #dee2e6;
+    }
+    .main-circle{border-color:#495057;border-width:3px;min-width:330px;min-height:350px;padding:24px 20px;}
+    .side-circle{min-width:200px;}
+    .circle-node .icon{margin:25px 0 14px;color:#6c757d;} /* تستخدم currentColor */
+    .icon-svg{width:50px;height:50px;display:block}
+    .circle-node .label{font-size:26px;color:#6c757d;font-weight:600;margin-bottom:12px;}
+    .circle-node .number{font-size:40px;font-weight:700;color:#212529;direction:ltr;font-feature-settings:"tnum";margin-bottom:12px;}
+    .circle-node .percent,.circle-node .text{font-size:26px;color:#495057;font-weight:600;}
+    .header-box{
+      background:linear-gradient(to left,#c6ae69 0%,#f2db8a 50%,#c6ae69 100%);
+      padding:25px 30px;text-align:center;border-radius:10px;
+      box-shadow:0 4px 12px rgba(0,0,0,.1);max-width:860px;margin:80px auto 20px;
+    }
+    .header-text{color:#404042;font-size:25px;font-weight:400;line-height:1.7;}
+    .header-text strong{font-weight:700;font-size:24px;}
+    @media (max-width:768px){
+      .org-chart{flex-direction:column;gap:25px}
+      .horizontal-connector{width:3px;height:30px}
+      .circle-node{min-width:240px}
+    }
+  </style>
+
+  <div class="inside-gender-container">
+    <div class="org-chart">
+      <!-- إناث خارج -->
+      <div class="circle-node side-circle">
+        <div class="icon">
+          <!-- أيقونة الإناث -->
+          <svg viewBox="0 0 64 64" class="icon-svg" aria-hidden="true" style="color:#495058;">
+            <path d="m39.062 46.801c-2.892 1.602-4.686 3.946-7.353 4.973-6.033 2.65-13.623 2.434-18.043-1.754-.505-.307-1.137-1.957-1.453-1.281a9.528 9.528 0 0 0 -2.498 6.61v4.651h23.738a30.793 30.793 0 0 0 9.85-14.426 11.183 11.183 0 0 0 -4.242 1.227z" fill="currentColor"/>
+            <path d="m51.916 48.868a10.011 10.011 0 0 0 -6.362-3.251 32.555 32.555 0 0 1 -8.785 14.383h17.515v-4.651a9.66 9.66 0 0 0 -2.368-6.481z" fill="currentColor"/>
+            <path d="m18.748 50.591a16.916 16.916 0 0 0 12.079-.775c2.421-.934 4.699-3.666 7.245-4.931a13.285 13.285 0 0 1 8.978-1.195 5.862 5.862 0 0 0 1.217-3.671c-.086-4.974-2.325-12.66-2.347-12.736a1.356 1.356 0 0 1 -.043-.301v-7.202c-1.615-16.751-13.812-15.793-14.329-15.739h-.215c-4.864-.486-15.358 3.189-14.329 20.831a39.848 39.848 0 0 0 -1.109 7.299c-.115 3.261 1.246 12.024 11.336 12.531a1.077 1.077 0 0 1 -.032 2.153 13.136 13.136 0 0 1 -12.628-9.312c-2.078 4.207-2.459 11.062 4.177 13.048zm7.719-18.075c-3.919-4.166-4.123-11.896-4.123-11.917a15.658 15.658 0 0 1 .388-3.133 23.117 23.117 0 0 1 17.44.043 15.626 15.626 0 0 1 .366 3.036c0 .075-.205 7.805-4.123 11.971a6.96 6.96 0 0 1 -9.948 0z" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="node-label label">إجمالي الإناث</div>
+        <div class="node-number number">717,046</div>
+        <div class="node-percent percent">48%</div>
+      </div>
+
+      <div class="horizontal-connector"></div>
+
+      <!-- إجمالي حجاج الخارج -->
+      <div class="circle-node main-circle">
+        <div class="icon">
+          <!-- أيقونة إجمالي (زوج/زوجة) -->
+            <!-- أيقونة إجمالي (زوج/زوجة كبيرة) -->
+           <svg viewBox="0 0 512 512" class="icon-svg"
+           style="width:50px;height:50px;margin-top:25px;color:#495058;">
+           <circle cx="135.307" cy="42.478" r="42.478" fill="currentColor"/>
+           <path d="M140.619,471.349v16.055c0,13.584,11.013,24.596,24.596,24.596c13.584,0,24.596-11.012,24.596-24.596v-16.055H140.619z" fill="currentColor"/>
+           <path d="M80.808,471.349v16.055c0,13.584,11.013,24.596,24.596,24.596s24.596-11.012,24.596-24.596v-16.055H80.808z" fill="currentColor"/>
+           <path d="M239.468,142.641c-0.101-20.079-12.711-37.327-30.504-44.588c8.644,50.011,11.337,169.256,12.074,215.665c10.35-1.036,18.43-9.77,18.43-20.393V142.745C239.469,142.711,239.469,142.676,239.468,142.641z" fill="currentColor"/>
+           <path d="M206.145,332.533l0.008,0.004c0,0-1.77-191.949-13.969-241.057c-0.69-2.777-3.423-2.41-5.232-2.41c-1.358,0-2.653,0.575-3.565,1.583L78.834,206.263c0,0-3.85,23.513-6.688,43.158v-58.323v-48.279c0-0.002,0-0.004,0-0.006c0.026-2.443,2.022-4.406,4.465-4.392c2.443,0.014,4.415,1.999,4.415,4.442v38.415c11.442-12.653,66.499-73.532,78.585-86.897c-7.656,0-71.552,0-79.198,0c-27.03,0-49.129,21.651-49.261,48.262c-0.001,0.034-0.001,0.068-0.001,0.102v150.581c0,1.415,0.143,2.797,0.417,4.131c1.849,9.036,9.652,15.881,19.129,16.318c0.318,0.015,0.631,0.048,0.952,0.048c5.713,0,10.874-2.342,14.592-6.112c-1.544,23.256-2.369,47.671-2.369,72.859c0,15.454,0.312,49.366,0.906,68.653c0.12,3.9,3.314,6.993,7.217,6.993h127.048c3.899,0,7.096-3.096,7.217-6.993C206.629,437.261,208.074,377.725,206.145,332.533z" fill="currentColor"/>
+           <path d="M371.984,471.64v15.94h0c0,13.487,10.934,24.419,24.42,24.419c13.487,0,24.42-10.933,24.42-24.419v-15.94H371.984z" fill="currentColor"/>
+           <path d="M312.602,471.64v15.94h0c0,13.487,10.934,24.419,24.42,24.419c13.487,0,24.42-10.933,24.42-24.419v-15.94H312.602z" fill="currentColor"/>
+           <circle cx="372.828" cy="43.802" r="42.158" fill="currentColor"/>
+           <path d="M435.193,248.279l-62.854-44.48c-77.718,55-66.815,47.298-68.471,48.423c-1.832,12.743-2.392,18.218-2.392,18.218l0.005,0.002c-3.665,34.1-5.696,71.639-5.696,111.071c0,15.343,0.308,49.011,0.9,68.16c0.119,3.872,3.29,6.943,7.164,6.943h126.138c3.871,0,7.045-3.074,7.164-6.943c0.591-19.149,2.776-52.539,2.776-67.882C439.93,365.532,438.26,275.954,435.193,248.279z" fill="currentColor"/>
+           <path d="M423.178,94.496c-0.349-1.404-1.61-2.393-3.057-2.393h-2.137c-1.349,0-2.634,0.571-3.539,1.57l-40.685,44.987c10.691-4.311,23.281-3.275,33.389,3.879l23.809,16.849C429.021,131.696,426.485,107.81,423.178,94.496z" fill="currentColor"/>
+           <path d="M480.338,218.841l-11.51-81.363c-2.373-16.649-13.827-30.136-28.866-35.749c5.863,34.598,6.817,78.716,7.103,87.082l-48.413-34.261c-8.291-5.867-19.448-4.632-26.311,2.431c-6.942-7.146-18.151-8.206-26.311-2.431l-35.048,24.803c1.924-13.505,3.297-23.136,5.149-36.136v-0.001c0.061-1.317,1.162-2.345,2.48-2.314c1.318,0.031,2.369,1.109,2.369,2.427v10.922l16.55-11.713c5.227-3.7,11.454-5.995,18.234-6.379c3.657-4.044,29.793-33.143,33.418-37.151c0,0-49.579,0-68.492,0c-0.129-0.001-0.256,0-0.385,0c-22.237,0-41.311,16.417-44.454,38.468c0,0-11.711,82.099-11.869,83.519c-1.97,17.674,17.887,28.823,31.947,18.85c6.192-4.382,60.322-42.688,73.601-52.085c1.03-0.729,1.957-1.545,2.809-2.417c0.851,0.871,1.779,1.689,2.808,2.417l73.601,52.085C463.915,250.578,484.347,236.945,480.338,218.841z" fill="currentColor"/>
+           </svg>
+        </div>
+        <div class="node-label label">إجمالي حجاج الخارج</div>
+        <div class="node-number number">1,506,576</div>
+        <div class="node-percent percent">90%</div>
+      </div>
+
+      <div class="horizontal-connector"></div>
+
+      <!-- ذكور خارج -->
+      <div class="circle-node side-circle">
+        <div class="icon">
+          <!-- أيقونة الذكور -->
+          <svg viewBox="0 0 48 48" class="icon-svg" aria-hidden="true" style="color:#495058;">
+            <path d="m36.7 24.13a28.273 28.273 0 0 0 -8.53-3.67 13.457 13.457 0 0 0 4.83-9.75 8.872 8.872 0 0 0 -9-8.71 8.872 8.872 0 0 0 -9 8.71 13.457 13.457 0 0 0 4.83 9.75 28.273 28.273 0 0 0 -8.53 3.67 6.815 6.815 0 0 0 -3.3 5.87v15a1 1 0 0 0 1 1h30a1 1 0 0 0 1-1v-14.92a6.978 6.978 0 0 0 -3.3-5.95zm-19.7-13.42a5.534 5.534 0 0 1 .04-.71h13.92a5.534 5.534 0 0 1 .04.71c0 3.67-3.14 9.29-7 9.29s-7-5.62-7-9.29zm21 33.29h-4v-11a1 1 0 0 0 -2 0v.64c-7.34-2.43-12.7-8.21-14.52-10.38a17.294 17.294 0 0 1 6.52-1.26c2.63 0 6.08.46 11.67 3.84a4.969 4.969 0 0 1 2.33 4.24z" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="node-label label">إجمالي الذكور</div>
+        <div class="node-number number">789,530</div>
+        <div class="node-percent percent">52%</div>
+      </div>
+    </div>
+
+    <div class="header-box">
+      <div class="header-text">
+        من بين كل <strong>100</strong> حاج من حجاج الخارج لعام <strong>1446هـ</strong>:
+        يوجد <strong>52</strong> حاجاً من الذكور
+      </div>
+    </div>
+  </div>`;
+}
 
     function NinthPage(){
       viewEl.innerHTML = `
@@ -1003,4 +1123,3 @@
   </script>
 </body>
 </html>
-

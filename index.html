@@ -3,135 +3,219 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>إحصائيات الحجاج - 1920×1080</title>
-  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <title>إحصائيات الحجاج - عرض دوري متكامل (1920×1080)</title>
+
+  <!-- خط و Highcharts -->
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/11.2.0/highcharts.min.js"></script>
+
   <style>
     :root{
       --stage-w: 1920px;
       --stage-h: 1080px;
-      --gutter: 20px;
-      --frame-pad: 18px;
-      --header-h: 100px; /* ارتفاع تقريبي للـ header-pill */
-      --charts-min: 340px;
+      --pad: 24px;
+      --card-radius: 12px;
+      --brand: #495057;
+      --brand-2: #adb5bd;
+      --gold-1:#c6ae69;
+      --gold-2:#f2db8a;
+      --bg:#f5f5f5;
+      --text:#212529;
+      --muted:#6c757d;
+      --line:#dee2e6;
     }
-    *{margin:0;padding:0;box-sizing:border-box}
-    html,body{height:100%}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html,body{height:100%;}
     body{
       font-family:'Almarai','Segoe UI',sans-serif;
-      background:#f5f5f5;
-      overflow:hidden; /* منع التمرير */
+      background:var(--bg);
+      overflow:hidden; /* لأننا نستخدم لوح ثابت */
     }
 
-    /* مرحلة التصميم 1920×1080 وتتحجّم تلقائيًا */
-    .stage-wrapper{
-      width:100vw;height:130vh;
-      display:flex;align-items:flex-start;justify-content:center;
-      padding:0;
+    /* حاوية خارجية مسؤولة عن ضبط القياس */
+    .viewport{
+      position:fixed;
+      inset:0;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
     }
-    #stage{
+    /* لوح العرض بدقة 1920×1080 */
+    .stage-1920x1080{
       width:var(--stage-w);
       height:var(--stage-h);
-      transform-origin: top left;
-      background:transparent;
-      padding:var(--gutter);
+      background:#fff;
+      border-radius:16px;
+      box-shadow:0 8px 30px rgba(0,0,0,0.12);
+      border:3px solid var(--line);
+      transform-origin:center center;
+      /* منع تسلّق المحتوى خارج اللوح عند التحجيم */
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
     }
 
-    /* تخطيط داخلي ثابت لارتفاع الشاشة */
+    /* رأس علوي كبسولة */
     .header-pill{
-      display:flex;justify-content:space-between;align-items:center;
-      width:100%;height:var(--header-h);
-      background:#495057;color:#fff;text-align:center;
-      padding:0 16px;font-size:26px;font-weight:700;border-radius:12px;
-      box-shadow:0 2px 6px rgba(0,0,0,0.15);letter-spacing:.3px;margin-bottom:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:16px;
+      background:var(--brand);
+      color:#fff;
+      height:72px; /* ثابت ليتماشى مع 1080 */
+      padding-inline:16px;
+      font-size:26px;
+      font-weight:800;
     }
-    .header-pill span{flex:1;text-align:center}
-    .logo-inside{height:48px;width:auto}
+    .header-pill .logo-inside{
+      height:42px;
+      width:auto;
+    }
 
-    /* الإطار يملأ ما تبقى من ارتفاع الشاشة */
+    /* إطار المحتوى */
     .frame{
-      width:100%;
-      height:calc(var(--stage-h) - var(--gutter) - var(--header-h) - var(--gutter));
-      background:#fff;border-radius:12px;border:1px solid #e5e5e5;
-      padding:var(--frame-pad);box-shadow:0 1px 3px rgba(0,0,0,0.08);
-      display:flex;flex-direction:column;gap:8px;
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      padding:var(--pad);
+      gap:10px;
+      overflow:hidden;
     }
 
-    /* مساحة العرض والرسوم */
-    .view{flex:1;min-height:0; /* للسماح بتقليص داخل flex */ }
-    .fade-out{opacity:0;transition:opacity .25s ease}
-    .fade-in{opacity:1;transition:opacity .25s ease}
-
-    .charts-row{
-      display:grid;
-      grid-template-columns:repeat(3, 1fr);
-      gap:18px;margin-top:4px; height:100%;
+    /* مساحة العرض المتبدّل */
+    .view{
+      flex:1;
+      min-height:0; /* مهم جداً مع flex:1 */
+      background:#fff;
+      border:1px solid #e9e9e9;
+      border-radius:var(--card-radius);
+      padding:16px;
+      overflow:auto; /* إن زاد محتوى إحدى الشرائح */
+      transition:opacity .25s ease;
     }
-    .chart-card{background:#fafafa;border:1px solid #e0e0e0;border-radius:10px;padding:14px 12px}
-    .chart-title{font-size:18px;color:#2c3e50;margin-bottom:10px;text-align:center;font-weight:700;padding-bottom:8px;border-bottom:2px solid #e0e0e0}
-    .chart-card-line{height:100%}
-    .chart-area{min-height:260px}
+    .fade-out{opacity:0;}
+    .fade-in{opacity:1;}
 
-    /* بطاقات الدونات */
+    /* سطر المصدر + أدوات التحكّم + الشريط */
+    .source-attribution{
+      font-size:16px;color:var(--muted);text-align:right;
+    }
+    .controls{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:12px;
+      padding-top:8px;
+      border-top:1px solid #e9e9e9;
+    }
+    .view-info{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+    .view-title{font-size:16px;color:#495057;font-weight:800;}
+    .dots{display:flex;gap:10px;}
+    .dot{width:12px;height:12px;border-radius:999px;background:#d0d0d0;cursor:pointer;transition:.2s;}
+    .dot:hover{background:#aaa;}
+    .dot.active{background:var(--brand);width:30px;border-radius:6px;}
+    .btn{
+      background:#fff;color:var(--brand);
+      border:1px solid var(--brand);
+      padding:10px 20px;
+      border-radius:10px;font-size:16px;font-weight:800;
+      cursor:pointer;
+      font-family:'Almarai',sans-serif;
+    }
+    .btn:hover{background:var(--brand);color:#fff;}
+    .progress{height:4px;background:#e0e0e0;border-radius:999px;overflow:hidden;}
+    .progress-fill{height:100%;background:var(--brand);width:0%;transition:width .1s linear;}
+
+    /* كروت ورسوم */
+    .chart-card{background:#fafafa;border:1px solid #e0e0e0;border-radius:10px;padding:18px 16px;}
+    .chart-card-line{min-height:0;}
+    .chart-title{font-size:20px;color:#2c3e50;margin-bottom:12px;text-align:center;font-weight:800;border-bottom:2px solid #e0e0e0;padding-bottom:10px;}
+    .donut-header{background:#5B5B5E;color:#fff;text-align:center;padding:12px;font-size:20px;font-weight:bold;border-radius:8px;margin-bottom:12px;}
+
     .chart-container{
-      display:grid;grid-template-columns:repeat(4, 1fr);
-      gap:14px; padding:6px; height:100%;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+      padding:4px;
     }
     .chart-card-donut{
-      background:#fff;border:1px solid #eee;border-radius:8px;
-      padding:8px; display:flex;flex-direction:column;align-items:center;
-      box-shadow:0 2px 4px rgba(0,0,0,0.05); min-width:var(--charts-min);
+      min-height:540px;
+      display:flex;flex-direction:column;align-items:center;
+      padding:8px;border:1px solid #eee;border-radius:10px;background:#fff;
+      box-shadow:0 2px 4px rgba(0,0,0,.05);
     }
     .donut-center{
-      position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-      text-align:center; font-size:22px; font-weight:700; color:#333; pointer-events:none; z-index:10;
+      position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+      text-align:center;font-size:24px;font-weight:800;color:#333;pointer-events:none;z-index:10;
     }
-    .donut-center span{display:block;font-size:14px;color:#666;margin-top:5px}
+    .donut-center span{display:block;font-size:14px;color:#666;margin-top:5px;}
 
-    /* إسناد المصدر + عناصر التحكم */
-    .source-attribution{padding-top:6px;border-top:1px solid #e9e9e9;text-align:right;font-size:14px;color:#6c757d;font-weight:500}
-    .controls{display:flex;justify-content:space-between;align-items:center;gap:10px}
-    .view-info{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-    .view-title{font-size:14px;color:#495057;font-weight:700}
-    .dots{display:flex;gap:8px}
-    .dot{width:10px;height:10px;border-radius:50%;background:#d0d0d0;cursor:pointer;transition:.25s}
-    .dot:hover{background:#999}
-    .dot.active{background:#495057;width:26px;border-radius:5px}
-    .btn{background:#fff;color:#495057;border:1px solid #495057;padding:8px 16px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Almarai',sans-serif}
-    .btn:hover{background:#495057;color:#fff}
-    .progress{height:3px;background:#e0e0e0;border-radius:999px;overflow:hidden;margin-top:6px}
-    .progress-fill{height:100%;background:#495057;width:0%;transition:width .1s linear}
+    /* بطاقات الأرقام والهيكل */
+    .top-stats{
+      display:flex;gap:18px;justify-content:center;align-items:center;margin:8px 0 8px;flex-wrap:wrap;
+    }
+    .stat-item{
+      display:flex;align-items:center;gap:16px;padding:16px 22px;background:#f8f9fa;border-radius:10px;border:1px solid var(--line);
+      min-width:360px;height:100px;
+    }
+    .icon-circle{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff;border:3px solid var(--line);}
+    .icon-circle svg{width:28px;height:28px;fill:#6c757d;}
+    .stat-info{text-align:right;}
+    .stat-number{font-size:28px;font-weight:800;color:var(--text);direction:ltr;}
+    .stat-label{font-size:14px;color:var(--muted);margin-top:4px;font-weight:600;}
+    .percentage-badge{font-size:20px;font-weight:800;color:#495057;min-width:50px;text-align:center;}
 
-    /* دوائر وstat boxes – ضبط سريع للملاءمة */
-    .top-stats{display:flex;gap:10px;justify-content:center;margin:4px 0 8px;flex-wrap:wrap}
-    .stat-item{display:flex;align-items:center;gap:14px;padding:14px 18px;background:#f8f9fa;border-radius:10px;border:1px solid #dee2e6;min-width:260px}
-    .stat-number{font-size:26px;font-weight:800;color:#212529;direction:ltr}
-    .percentage-badge{background:#495057;color:#fff;padding:6px 12px;border-radius:18px;font-size:16px;font-weight:700}
+    .org-structure{
+      display:flex;flex-direction:column;align-items:center;gap:8px;min-height:0;
+    }
+    .level{display:flex;justify-content:center;gap:10px;position:relative;width:100%;}
+    .level-wrapper{display:flex;flex-direction:column;align-items:center;flex:1;}
+    .node{
+      background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.06);min-width:260px;min-height:140px;
+    }
+    .level-1 .node{border-color:var(--brand);border-width:3px;}
+    .level-2 .node{border-color:var(--brand);}
+    .level-3 .node{border-color:var(--line);}
+    .node-icon{width:28px;height:28px;margin:6px auto 8px;display:flex;align-items:center;justify-content:center;background:var(--brand);border-radius:50%;}
+    .node-icon svg{width:16px;height:16px;fill:#fff;}
+    .node-label{font-size:16px;color:var(--muted);margin-bottom:6px;}
+    .node-number{font-size:26px;font-weight:800;color:var(--text);direction:ltr;}
+    .node-text{font-size:14px;color:var(--muted);margin-top:3px;}
+    .node-percent{font-size:18px;font-weight:800;color:var(--brand);margin-top:3px;}
+    .vertical-line{width:2px;height:8px;background:var(--line);margin:0 auto;}
+    .connector-circle{width:16px;height:16px;background:#fff;border:2px solid var(--line);border-radius:50%;margin:0 auto;}
+    .branch-line{width:70%;height:2px;background:var(--line);margin:2px auto;}
 
-    /* تنظيم هرمي – تقليص هوامش وارتفاعات */
-    .org-structure{display:flex;flex-direction:column;align-items:center;gap:6px;height:calc(100% - 120px);margin:0}
-    .level{display:flex;justify-content:center;gap:10px;width:100%}
-    .node{background:#fff;border:2px solid #dee2e6;border-radius:10px;padding:8px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.06);min-width:220px}
-    .level-1 .node{border-color:#495057;border-width:3px;min-width:240px;min-height:120px}
-    .level-2 .node{border-color:#495057;border-width:2px;min-width:240px;min-height:120px}
-    .level-3 .node{min-width:220px;min-height:120px}
-    .node-number{font-size:24px;font-weight:800;color:#212529;direction:ltr}
-    .node-label{font-size:14px;color:#6c757d;margin-top:2px}
-    .node-percent{font-size:16px;color:#495057;margin-top:4px}
-    .branch-line{width:60%;height:2px;background:#dee2e6;margin:2px auto}
-    .vertical-line{width:2px;height:6px;background:#dee2e6;margin:0 auto}
-    .connector-circle{width:14px;height:14px;background:#fff;border:2px solid #dee2e6;border-radius:50%;margin:0 auto}
+    .header-box{
+      background:linear-gradient(to left, var(--gold-1) 0%, var(--gold-2) 50%, var(--gold-1) 100%);
+      padding:20px;text-align:center;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.08);
+      width:min(100%, 1120px);margin:20px auto 0;
+    }
+    .header-text{color:#404042;font-size:22px;font-weight:500;line-height:1.7;}
+    .header-text strong{font-weight:800;font-size:24px;}
 
-    /* لا حاجة لميديا هنا لأننا نعمل لشاشة ثابتة 1920×1080 */
+    /* لأننا داخل لوح ثابت، نضبط ارتفاعات الرسوم لتناسب 1080 */
+    .hc-700{height:700px;}
+    .hc-640{height:640px;}
+    .hc-600{height:600px;}
+    .hc-590{height:590px;}
+    .hc-560{height:560px;}
+    .hc-520{height:520px;}
+
+    /* لا نحتاج ميديا كبيرة لأن القياس ثابت، لكن نُحسّن قليلاً إذا تم تصغير اللوح */
+    @media (max-height: 760px){
+      .header-pill{height:60px;font-size:22px;}
+      .stat-item{min-width:320px;height:90px;}
+      .chart-card-donut{min-height:500px;}
+    }
   </style>
 </head>
 <body>
-  <div class="stage-wrapper">
-    <div id="stage">
+  <div class="viewport">
+    <!-- لوح 1920×1080 -->
+    <div id="stage" class="stage-1920x1080">
       <div class="header-pill">
         <img src="mathabh-logo-white.svg" alt="شعار المجمع" class="logo-inside" />
         <span id="headerTitle">إحصائيات الحجاج</span>
-        <div style="width:48px"></div>
       </div>
 
       <div class="frame">
@@ -151,28 +235,39 @@
   </div>
 
   <script>
-    /* مقياس تلقائي: يضبط #stage ليمتد بالحجم المناسب مع الحفاظ على النسبة */
-    (function fitStage(){
+    /* ====== مقياس تلقائي لملاءمة اللوح داخل أي نافذة ======
+       لا يغيّر القياسات الداخلية، فقط يطبّق transform: scale
+    */
+    (function autoScaleStage(){
       const stage = document.getElementById('stage');
-      function scale(){
-        const scaleX = window.innerWidth / 1920;
-        const scaleY = window.innerHeight / 1080;
-        const s = Math.min(scaleX, scaleY);
+      function fit(){
+        const vw = window.innerWidth, vh = window.innerHeight;
+        const sw = 1920, sh = 1080;
+        const s = Math.min(vw / sw, vh / sh);
         stage.style.transform = 'scale(' + s + ')';
       }
-      window.addEventListener('resize', scale);
-      scale();
+      window.addEventListener('resize', fit);
+      fit();
     })();
 
+    /* ====== إعدادات Highcharts العامة ====== */
     Highcharts.setOptions({
-      lang:{thousandsSep:','},
-      chart:{style:{fontFamily:"'Almarai','Segoe UI',sans-serif"},backgroundColor:'transparent'},
-      colors:['#495057','#adb5bd','#6c757d','#ced4da'],
-      tooltip:{backgroundColor:'rgba(255,255,255,0.96)',borderColor:'#ddd',borderWidth:1,borderRadius:6,style:{color:'#333',fontSize:'13px'},useHTML:true},
-      credits:{enabled:false},
-      exporting:{enabled:false}
+      lang: { thousandsSep: ',' },
+      chart: { style: { fontFamily: "'Almarai','Segoe UI',sans-serif" }, backgroundColor: 'transparent' },
+      colors: ['#495057','#adb5bd','#6c757d','#ced4da'],
+      tooltip: {
+        backgroundColor: 'rgba(255,255,255,0.96)',
+        borderColor: '#ddd',
+        borderWidth: 1,
+        borderRadius: 6,
+        style: { color: '#333', fontSize: '13px' },
+        useHTML: true
+      },
+      credits: { enabled: false },
+      exporting: { enabled: false }
     });
 
+    /* ====== عناصر DOM عامة ====== */
     const viewEl = document.getElementById('view');
     const titleEl = document.getElementById('viewTitle');
     const dotsEl = document.getElementById('dots');
@@ -180,244 +275,608 @@
     const pauseBtn = document.getElementById('pauseBtn');
     const headerTitleEl = document.getElementById('headerTitle');
 
+    /* ====== بيانات مشتركة ====== */
     const categories = ['1424','1425','1426','1427','1428','1429','1430','1431','1432','1433','1434','1435','1436','1437','1438','1439','1440','1441','1442','1443','1444','1445','1446'];
 
-    /* === تعريف الصفحات (كما هي)، مع تعديل ارتفاع الرسوم لملاءمة 1080px === */
+    /* ====== قائمة الشرائح (العروض) ====== */
     const views = [
-      { key:'total-area',    title:'تطور أعداد الحجاج',             render: FirstPage },
-      { key:'outside-area',  title:'تطور أعداد الحجاج',             render: SecondPage },
-      { key:'inside-area',   title:'تطور أعداد الحجاج',             render: ThirdPage },
-      { key:'summary',       title:'إحصاءات حج 1446هـ',             render: FourthPage },
-      { key:'donuts',        title:'إحصاءات حج 1446هـ',             render: FifthPage },
-      { key:'inside-gender', title:'إحصائيات حجاج الداخل لعام 1446هـ', render: SixthPage },
-      { key:'inside-1446',   title:'حجاج الداخل 1446هـ',            render: SeventhPage },
-      { key:'outside-1446',  title:'حجاج الخارج 1446هـ',            render: EighthPage },
-      { key:'page9',         title:'حجاج الخارج 1446هـ',            render: NinthPage },
-      { key:'page10',        title:'حجاج الخارج 1446هـ',            render: TenthPage },
-      { key:'visitors',      title:'مجمّع الملك عبدالعزيز',         render: EleventhPage }
+      { key: 'total-area',    title: 'تطور أعداد الحجاج',               render: FirstPage },
+      { key: 'outside-area',  title: 'تطور أعداد الحجاج',               render: SecondPage },
+      { key: 'inside-area',   title: 'تطور أعداد الحجاج',               render: ThirdPage },
+      { key: 'summary',       title: 'إحصاءات حج 1446هـ',               render: FourthPage },
+      { key: 'donuts',        title: 'إحصاءات حج 1446هـ',               render: FifthPage },
+      { key: 'inside-gender', title: 'إحصائيات حجاج الداخل لعام 1446هـ',render: SixthPage },
+      { key: 'inside-1446',   title: 'حجاج الداخل 1446هـ',              render: SeventhPage },
+      { key: 'outside-1446',  title: 'حجاج الخارج 1446هـ',              render: EighthPage },
+      { key: 'page9',         title: 'حجاج الخارج 1446هـ',              render: NinthPage },
+      { key: 'page10',        title: 'حجاج الخارج 1446هـ',              render: TenthPage },
+      { key: 'visitors',      title: 'مجمّع الملك عبدالعزيز',           render: EleventhPage }
     ];
 
-    let current=0, paused=false, tick=null, bar=null, prog=0;
+    let current = 0, paused = false, tick = null, bar = null, prog = 0;
 
     function buildDots(){
       dotsEl.innerHTML='';
       views.forEach((v,i)=>{
-        const d=document.createElement('div');
-        d.className='dot'+(i===current?' active':'');
-        d.title=v.title;
-        d.onclick=()=>{goTo(i); if(paused){togglePause();} resetProgress();};
+        const d = document.createElement('div');
+        d.className = 'dot' + (i===current?' active':'');
+        d.title = v.title;
+        d.onclick = () => { goTo(i); if (paused) togglePause(); resetProgress(); };
         dotsEl.appendChild(d);
       });
     }
+
     function updateUI(){
       titleEl.textContent = views[current].title;
       headerTitleEl.textContent = views[current].title;
-      [...dotsEl.children].forEach((d,i)=>d.classList.toggle('active', i===current));
+      [...dotsEl.children].forEach((d,i)=> d.classList.toggle('active', i===current));
     }
+
     function goTo(i){
-      current = (i+views.length)%views.length;
+      current = (i + views.length) % views.length;
       viewEl.classList.remove('fade-in'); viewEl.classList.add('fade-out');
       setTimeout(()=>{
-        viewEl.innerHTML=''; views[current].render(); updateUI();
+        viewEl.innerHTML = '';
+        views[current].render();
+        updateUI();
         viewEl.classList.remove('fade-out'); viewEl.classList.add('fade-in');
         resetProgress();
       }, 200);
     }
-    function next(){ goTo(current+1); }
-    function startAuto(){ clearInterval(tick); tick=setInterval(()=>{ if(!paused) next(); }, 13000); }
-    function startBar(){ clearInterval(bar); prog=0; progressFill.style.width='0%';
-      bar=setInterval(()=>{ if(!paused){ prog+=1; if(prog>100) prog=0; progressFill.style.width=prog+'%'; } },130);
+
+    function next(){ goTo((current + 1) % views.length); }
+    function startAuto(){ clearInterval(tick); tick = setInterval(()=>{ if(!paused) next(); }, 13000); }
+    function startBar(){
+      clearInterval(bar); prog = 0; progressFill.style.width='0%';
+      bar = setInterval(()=>{
+        if(!paused){
+          prog += 1; if (prog>100) prog = 0;
+          progressFill.style.width = prog + '%';
+        }
+      }, 130);
     }
     function resetProgress(){ startBar(); }
-    function togglePause(){ paused=!paused; pauseBtn.textContent = paused ? 'تشغيل' : 'إيقاف مؤقت'; }
+    function togglePause(){ paused = !paused; pauseBtn.textContent = paused ? 'تشغيل' : 'إيقاف مؤقت'; }
     pauseBtn.addEventListener('click', togglePause);
 
-    /* === الصفحات (عدّلت ارتفاعات Highcharts إلى 540–600px) === */
+    /* =========================================================
+       الصفحات / الدوال (كلها مهيأة لارتفاعات مناسبة لـ 1080p)
+       ========================================================= */
+
     function FirstPage(){
-      viewEl.innerHTML='<div id="chartTotal" style="height:100%"></div>';
-      setTimeout(()=>{ Highcharts.chart('chartTotal',{
-        chart:{ type:'area', height: 600 },
-        title:{ text:'تطور أعداد حجاج الداخل والخارج والإجمالي خلال الفترة من 1424هـ إلى 1446هـ', style:{fontSize:'18px',fontWeight:'600'} },
-        xAxis:{ categories, plotBands:[{from:16.5,to:18.5,color:'rgba(203,203,203,0.16)',label:{text:'جائحة كورونا',style:{color:'#313632',fontWeight:'600'}}}]},
-        yAxis:{ title:{text:''}, labels:{ formatter(){ return this.value.toLocaleString(); } } },
-        tooltip:{shared:true,useHTML:true,headerFormat:'<div style="text-align:center;direction:rtl;font-weight:600;margin-bottom:6px;">{point.key} هـ</div>',
-          pointFormat:'<span style="color:{point.color}">●</span> {series.name}: <b>{point.y:,.0f}</b><br/>'},
-        legend:{enabled:true,align:'center',verticalAlign:'bottom',layout:'horizontal',itemStyle:{fontSize:'14px'},symbolRadius:7,symbolHeight:10,symbolWidth:10,y:10},
-        plotOptions:{area:{animation:{duration:6000},fillOpacity:.4,lineWidth:2,marker:{enabled:true,radius:3}}},
-        series:[
-          {name:'حجاج الداخل', data:[592368,629710,700603,724229,746511,679008,699313,989798,1099522,1408641,600718,696185,567876,537537,600108,612953,634379,1000,58745,144653,184130,221854,166654],
-           color:{linearGradient:{x1:0,y1:0,x2:0,y2:1},stops:[[0,'#9e9f9e'],[1,'rgba(158,159,158,0.1)']]}},
-          {name:'حجاج الخارج', data:[1419706,1534759,1557447,1654407,1707814,1729841,1613965,1799601,1828195,1752932,1379531,1389053,1384941,1325372,1752014,1758722,1855027,0,0,781409,1660915,1611310,1506576],
-           color:{linearGradient:{x1:0,y1:0,x2:0,y2:1},stops:[[0,'#424241'],[1,'rgba(66,66,65,0.1)']]}},
-          {name:'إجمالي الحجاج', data:[2012074,2164469,2258050,2378636,2454325,2408849,2313278,2789399,2927717,3161573,1980249,2085238,1952817,1862909,2352122,2371675,2489406,1000,58745,926062,1845045,1833164,1673230],
-           color:{linearGradient:{x1:0,y1:0,x2:0,y2:1},stops:[[0,'#f4df90'],[1,'rgba(244,223,144,0.15)']]}}
-        ]
-      }); }, 100);
+      viewEl.innerHTML = '<div id="chartTotal" class="hc-640"></div>';
+      setTimeout(()=>{
+        Highcharts.chart('chartTotal', {
+          chart:{ type:'area', height:640 },
+          title:{ text:'تطور أعداد حجاج الداخل والخارج والإجمالي خلال الفترة من 1424هـ إلى 1446هـ', style:{ fontSize:'20px', fontWeight:'800' }},
+          xAxis:{ categories,
+            plotBands:[{ from:16.5, to:18.5, color:'rgba(203,203,203,.16)', label:{ text:'جائحة كورونا', style:{ color:'#313632', fontWeight:'800' }}}]
+          },
+          yAxis:{ title:{ text:'' }, labels:{ formatter(){ return this.value.toLocaleString(); } } },
+          tooltip:{ shared:true, useHTML:true,
+            headerFormat:'<div style="text-align:center;direction:rtl;font-weight:800;margin-bottom:6px;">{point.key} هـ</div>',
+            pointFormat:'<span style="color:{point.color}">●</span> {series.name}: <b>{point.y:,.0f}</b><br/>',
+          },
+          legend:{ enabled:true, align:'center', verticalAlign:'bottom', layout:'horizontal',
+            itemStyle:{ fontSize:'14px' }, symbolRadius:7, symbolHeight:10, symbolWidth:10, y:10 },
+          plotOptions:{ area:{ animation:{ duration:8000 }, fillOpacity:.4, lineWidth:2, marker:{ enabled:true, radius:3 }}},
+          series:[
+            { name:'حجاج الداخل', data:[592368,629710,700603,724229,746511,679008,699313,989798,1099522,1408641,600718,696185,567876,537537,600108,612953,634379,1000,58745,144653,184130,221854,166654],
+              color:{ linearGradient:{x1:0,y1:0,x2:0,y2:1}, stops:[[0,'#9e9f9e'],[1,'rgba(158,159,158,.1)']] } },
+            { name:'حجاج الخارج', data:[1419706,1534759,1557447,1654407,1707814,1729841,1613965,1799601,1828195,1752932,1379531,1389053,1384941,1325372,1752014,1758722,1855027,0,0,781409,1660915,1611310,1506576],
+              color:{ linearGradient:{x1:0,y1:0,x2:0,y2:1}, stops:[[0,'#424241'],[1,'rgba(66,66,65,.1)']] } },
+            { name:'إجمالي الحجاج', data:[2012074,2164469,2258050,2378636,2454325,2408849,2313278,2789399,2927717,3161573,1980249,2085238,1952817,1862909,2352122,2371675,2489406,1000,58745,926062,1845045,1833164,1673230],
+              color:{ linearGradient:{x1:0,y1:0,x2:0,y2:1}, stops:[[0,'#f4df90'],[1,'rgba(244,223,144,.15)']] } }
+          ]
+        });
+      }, 100);
     }
 
     function SecondPage(){
-      viewEl.innerHTML='<div id="chartOutside" style="height:100%"></div>';
-      setTimeout(()=>{ Highcharts.chart('chartOutside',{
-        chart:{ type:'area', height: 560 },
-        title:{ text:'تطور أعداد حجاج الخارج خلال الفترة من 1424هـ إلى 1446هـ', style:{fontSize:'18px',fontWeight:'600'} },
-        xAxis:{ categories, plotBands:[{from:16.5,to:18.5,color:'rgba(203,203,203,0.16)',label:{text:'جائحة كورونا',style:{color:'#313632',fontWeight:'600'}}}]},
-        yAxis:{ title:{text:''}, labels:{ formatter(){ return this.value.toLocaleString(); } } },
-        plotOptions:{ area:{ animation:{duration:6000}, fillOpacity:.4, lineWidth:2, marker:{enabled:true,radius:3} } },
-        series:[{ name:'حجاج الخارج',
-          data:[1419706,1534759,1557447,1654407,1707814,1729841,1613965,1799601,1828195,1752932,1379531,1389053,1384941,1325372,1752014,1758722,1855027,0,0,781409,1660915,1611310,1506576],
-          color:{linearGradient:{x1:0,y1:0,x2:0,y2:1},stops:[[0,'#424241'],[1,'rgba(66,66,65,0.1)']]}, showInLegend:false }]
-      }); }, 60);
+      viewEl.innerHTML = '<div id="chartOutside" class="hc-640"></div>';
+      setTimeout(()=>{
+        Highcharts.chart('chartOutside', {
+          chart:{ type:'area', height:640 },
+          title:{ text:'تطور أعداد حجاج الخارج خلال الفترة من 1424هـ إلى 1446هـ', style:{ fontSize:'20px', fontWeight:'800' } },
+          xAxis:{ categories,
+            plotBands:[{ from:16.5, to:18.5, color:'rgba(203,203,203,.16)', label:{ text:'جائحة كورونا', style:{ color:'#313632', fontWeight:'800' }}}]
+          },
+          yAxis:{ title:{ text:'' }, labels:{ formatter(){ return this.value.toLocaleString(); } } },
+          plotOptions:{ area:{ animation:{ duration:8000 }, fillOpacity:.4, lineWidth:2, marker:{ enabled:true, radius:3 } } },
+          series:[{
+            name:'حجاج الخارج',
+            data:[1419706,1534759,1557447,1654407,1707814,1729841,1613965,1799601,1828195,1752932,1379531,1389053,1384941,1325372,1752014,1758722,1855027,0,0,781409,1660915,1611310,1506576],
+            color:{ linearGradient:{x1:0,y1:0,x2:0,y2:1}, stops:[[0,'#424241'],[1,'rgba(66,66,65,.1)']] },
+            showInLegend:false
+          }]
+        });
+      }, 60);
     }
 
     function ThirdPage(){
-      viewEl.innerHTML='<div id="chartInside" style="height:100%"></div>';
-      setTimeout(()=>{ Highcharts.chart('chartInside',{
-        chart:{ type:'area', height: 560 },
-        title:{ text:'تطور أعداد حجاج الداخل خلال الفترة من 1424هـ إلى 1446هـ', style:{fontSize:'18px',fontWeight:'600'} },
-        xAxis:{ categories, plotBands:[{from:16.5,to:18.5,color:'rgba(203,203,203,0.16)',label:{text:'جائحة كورونا',style:{color:'#313632',fontWeight:'600'}}}]},
-        yAxis:{ title:{text:''}, labels:{ formatter(){ return this.value.toLocaleString(); } } },
-        plotOptions:{ area:{ animation:{duration:6000}, fillOpacity:.4, lineWidth:2, marker:{enabled:true,radius:3} } },
-        series:[{ name:'حجاج الداخل',
-          data:[592368,629710,700603,724229,746511,679008,699313,989798,1099522,1408641,600718,696185,567876,537537,600108,612953,634379,1000,58745,144653,184130,221854,166654],
-          color:{linearGradient:{x1:0,y1:0,x2:0,y2:1},stops:[[0,'#9e9f9e'],[1,'rgba(158,159,158,0.1)']]}, showInLegend:false }]
-      }); }, 60);
+      viewEl.innerHTML = '<div id="chartInside" class="hc-640"></div>';
+      setTimeout(()=>{
+        Highcharts.chart('chartInside', {
+          chart:{ type:'area', height:640 },
+          title:{ text:'تطور أعداد حجاج الداخل خلال الفترة من 1424هـ إلى 1446هـ', style:{ fontSize:'20px', fontWeight:'800' } },
+          xAxis:{ categories,
+            plotBands:[{ from:16.5, to:18.5, color:'rgba(203,203,203,.16)', label:{ text:'جائحة كورونا', style:{ color:'#313632', fontWeight:'800' }}}]
+          },
+          yAxis:{ title:{ text:'' }, labels:{ formatter(){ return this.value.toLocaleString(); } } },
+          plotOptions:{ area:{ animation:{ duration:8000 }, fillOpacity:.4, lineWidth:2, marker:{ enabled:true, radius:3 } } },
+          series:[{
+            name:'حجاج الداخل',
+            data:[592368,629710,700603,724229,746511,679008,699313,989798,1099522,1408641,600718,696185,567876,537537,600108,612953,634379,1000,58745,144653,184130,221854,166654],
+            color:{ linearGradient:{x1:0,y1:0,x2:0,y2:1}, stops:[[0,'#9e9f9e'],[1,'rgba(158,159,158,.1)']] },
+            showInLegend:false
+          }]
+        });
+      }, 60);
     }
 
-    /* FourthPage..EleventhPage: نفس محتواك السابق – لم ألمس البيانات، فقط الارتفاعات/الحواف متناسقة */
-    function FourthPage(){ /* مقتطع مختصر: أعيدي محتوى صفحتك كما في الملف الأصلي */
-      /* للحفاظ على الإيجاز، أبقيت جميع عناصر FourthPage كما أرسلتِها،
-         فقط تُعرض داخل .view التي تم ضبط ارتفاعها سلفًا. */
-      /* الصقِي هنا محتوى FourthPage الأصلي من سؤالك (بدون تغييرات وظيفية) */
-      viewEl.innerHTML = `<!-- الصقي هنا محتوى FourthPage كما هو من سؤالك -->`;
-    }
-
-    function FifthPage(){
-      /* تم تقليص أحجام الدونات قليلاً لتناسب الإطار */
+    function FourthPage(){
       viewEl.innerHTML = `
-        <div class="chart-container">
-          <div class="chart-card-donut">
-            <div style="color:#484948;font-size:16px;font-weight:600;margin:12px 0 10px;">توزيع أعداد الحجاج لعام 1446هـ</div>
-            <div style="position:relative;width:100%;height:430px;" id="chart-inside-outside">
-              <div class="donut-center" id="center-io">1,656,243<span style="font-size:14px;color:#666;">إجمالي (تقريبي)</span></div>
+        <div class="top-stats">
+          <div class="stat-item" style="width:440px;">
+            <div class="stat-info">
+              <div class="stat-number">795,389</div>
+              <div class="stat-label">إجمالي الإناث</div>
+            </div>
+            <div class="icon-circle">
+              <svg viewBox="0 0 64 64"><circle cx="32" cy="18" r="10"/><path d="M35 32h9a2 2 0 0 1 2 2v26h-8V48h-6v12h-8V34a2 2 0 0 1 2-2h9z"/></svg>
+            </div>
+            <div class="percentage-badge">48%</div>
+          </div>
+          <div class="stat-item" style="width:440px;">
+            <div class="percentage-badge">52%</div>
+            <div class="icon-circle">
+              <svg viewBox="0 0 48 48"><circle cx="24" cy="12" r="8"/><path d="M18 26h12a4 4 0 0 1 4 4v14H14V30a4 4 0 0 1 4-4z"/></svg>
+            </div>
+            <div class="stat-info">
+              <div class="stat-number">877,841</div>
+              <div class="stat-label">إجمالي الذكور</div>
             </div>
           </div>
-          <div class="chart-card-donut">
-            <div style="color:#484948;font-size:16px;font-weight:600;margin:12px 0 10px;">توزيع أعداد الحجاج لعام 1446هـ وفق النوع</div>
-            <div style="position:relative;width:100%;height:430px;" id="chart-total">
-              <div class="donut-center" id="center-total">1,637,787<span style="font-size:14px;color:#666;">إجمالي الحجاج</span></div>
+        </div>
+
+        <div class="org-structure" style="gap:6px;">
+          <div class="level level-1">
+            <div class="node">
+              <div class="node-icon"><svg viewBox="0 0 24 24"><path fill="#fff" d="M12 2a5 5 0 0 1 5 5v3h-2V7a3 3 0 1 0-6 0v3H7V7a5 5 0 0 1 5-5Z"/></svg></div>
+              <div class="node-label">إجمالي الحجاج</div>
+              <div class="node-number">1,673,230</div>
+              <div class="node-text">حاج/حاجة</div>
             </div>
           </div>
-          <div class="chart-card-donut">
-            <div style="color:#484948;font-size:16px;font-weight:600;margin:12px 0 10px;">توزيع أعداد الحجاج الإناث لعام 1446هـ</div>
-            <div style="position:relative;width:100%;height:430px;" id="chart-female">
-              <div class="donut-center" id="center-female">779,194<span style="font-size:14px;color:#666;">إجمالي الإناث</span></div>
+          <div class="vertical-line"></div>
+          <div class="connector-circle"></div>
+          <div class="branch-line"></div>
+
+          <div class="level level-2">
+            <div class="level-wrapper">
+              <div class="node">
+                <div class="node-icon"><svg viewBox="0 0 24 24"><path fill="#fff" d="M12 2a5 5 0 0 1 5 5v3H7V7a5 5 0 0 1 5-5Z"/></svg></div>
+                <div class="node-label">حجاج الداخل</div>
+                <div class="node-number">166,654</div>
+                <div class="node-percent">10%</div>
+              </div>
+              <div class="vertical-line"></div>
+              <div class="connector-circle"></div>
+              <div class="branch-line" style="width:80%"></div>
+              <div class="level level-3">
+                <div class="node">
+                  <div class="node-icon"><svg viewBox="0 0 48 48"><circle cx="24" cy="12" r="8"/><path d="M18 26h12a4 4 0 0 1 4 4v14H14V30a4 4 0 0 1 4-4z"/></svg></div>
+                  <div class="node-label">ذكور داخل</div>
+                  <div class="node-number">88,311</div>
+                </div>
+                <div class="node">
+                  <div class="node-icon"><svg viewBox="0 0 64 64"><circle cx="32" cy="18" r="10"/><path d="M35 32h9a2 2 0 0 1 2 2v26h-8V48h-6v12h-8V34a2 2 0 0 1 2-2h9z"/></svg></div>
+                  <div class="node-label">إناث داخل</div>
+                  <div class="node-number">78,343</div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="chart-card-donut">
-            <div style="color:#484948;font-size:16px;font-weight:600;margin:12px 0 10px;">توزيع أعداد الحجاج الذكور لعام 1446هـ</div>
-            <div style="position:relative;width:100%;height:430px;" id="chart-male">
-              <div class="donut-center" id="center-male">858,593<span style="font-size:14px;color:#666;">إجمالي الذكور</span></div>
+
+            <div class="level-wrapper">
+              <div class="node">
+                <div class="node-icon"><svg viewBox="0 0 24 24"><path fill="#fff" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg></div>
+                <div class="node-label">حجاج الخارج (171 جنسية)</div>
+                <div class="node-number">1,506,576</div>
+                <div class="node-percent">90%</div>
+              </div>
+              <div class="vertical-line"></div>
+              <div class="connector-circle"></div>
+              <div class="branch-line" style="width:80%"></div>
+              <div class="level level-3">
+                <div class="node">
+                  <div class="node-icon"><svg viewBox="0 0 48 48"><circle cx="24" cy="12" r="8"/><path d="M18 26h12a4 4 0 0 1 4 4v14H14V30a4 4 0 0 1 4-4z"/></svg></div>
+                  <div class="node-label">ذكور خارج</div>
+                  <div class="node-number">789,530</div>
+                </div>
+                <div class="node">
+                  <div class="node-icon"><svg viewBox="0 0 64 64"><circle cx="32" cy="18" r="10"/><path d="M35 32h9a2 2 0 0 1 2 2v26h-8V48h-6v12h-8V34a2 2 0 0 1 2-2h9z"/></svg></div>
+                  <div class="node-label">إناث خارج</div>
+                  <div class="node-number">717,046</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       `;
-      const donutOptions = (data, colors, title) => ({
-        chart:{ type:'pie', height:360, width:360, spacing:[0,0,0,0], backgroundColor:'transparent' },
-        title:{ text:null },
-        plotOptions:{ pie:{
-          animation:{duration:5000}, innerSize:'55%', size:'70%', colors,
-          dataLabels:{ enabled:true, format:'<b>{point.percentage:.1f}%</b><br>{point.y:,.0f}',
-            style:{ fontSize:'13px', fontWeight:'600', textOutline:'2px contrast', color:'#000' }, connectorWidth:1, connectorColor:'#888' },
-          showInLegend:true
-        }},
-        legend:{ align:'center', verticalAlign:'bottom', rtl:true, itemStyle:{fontSize:'14px',fontFamily:"'Almarai',sans-serif",color:'#495057'} },
-        series:[{ name:title, data }]
-      });
-      setTimeout(()=>{
-        const gradientDark  = { radialGradient:{cx:.5,cy:.5,r:.8}, stops:[[0,'#c8b06a'],[.5,'#f2db8a'],[1,'#c8b06a']] };
-        const gradientLight = { radialGradient:{cx:.5,cy:.5,r:.8}, stops:[[0,'#9f9f9d'],[.5,'#d3d3d3'],[1,'#9f9f9d']] };
-        Highcharts.chart('chart-female',        donutOptions([{name:'داخل',y:78343},{name:'خارج',y:717046}], [gradientLight,gradientDark], 'الإناث'));
-        Highcharts.chart('chart-male',          donutOptions([{name:'داخل',y:88311},{name:'خارج',y:789530}], [gradientLight,gradientDark], 'الذكور'));
-        Highcharts.chart('chart-total',         donutOptions([{name:'ذكور',y:877841},{name:'إناث',y:795389}], [gradientLight,gradientDark], 'الإجمالي'));
-        Highcharts.chart('chart-inside-outside',donutOptions([{name:'داخل',y:166654},{name:'خارج',y:1506576}], [gradientLight,gradientDark], 'الإجمالي'));
-      },80);
     }
 
-    function SixthPage(){ viewEl.innerHTML = `<!-- الصقي هنا SixthPage كما هو من سؤالك؛ الارتفاعات تتكيّف مع الإطار -->`; }
-    function SeventhPage(){ viewEl.innerHTML = `<!-- الصقي هنا SeventhPage كما هو -->`; }
-    function EighthPage(){ viewEl.innerHTML = `<!-- الصقي هنا EighthPage كما هو -->`; }
+    function FifthPage(){
+      viewEl.innerHTML = `
+        <div class="chart-container">
+          <div class="chart-card-donut">
+            <div style="color:#484948;font-size:16px;font-weight:800;margin:16px 0;">توزيع أعداد الحجاج لعام 1446هـ</div>
+            <div style="position:relative;width:100%;height:520px;" id="chart-inside-outside">
+              <div class="donut-center" id="center-io">1,656,243<span style="font-size:16px;color:#666;">إجمالي (تقريبي)</span></div>
+            </div>
+          </div>
+          <div class="chart-card-donut">
+            <div style="color:#484948;font-size:16px;font-weight:800;margin:16px 0;">توزيع أعداد الحجاج لعام 1446هـ وفق النوع</div>
+            <div style="position:relative;width:100%;height:520px;" id="chart-total">
+              <div class="donut-center" id="center-total">1,637,787<span style="font-size:16px;color:#666;">إجمالي الحجاج</span></div>
+            </div>
+          </div>
+          <div class="chart-card-donut">
+            <div style="color:#484948;font-size:16px;font-weight:800;margin:16px 0;">توزيع أعداد الحجاج الإناث لعام 1446هـ</div>
+            <div style="position:relative;width:100%;height:520px;" id="chart-female">
+              <div class="donut-center" id="center-female">779,194<span style="font-size:16px;color:#666;">إجمالي الإناث</span></div>
+            </div>
+          </div>
+          <div class="chart-card-donut">
+            <div style="color:#484948;font-size:16px;font-weight:800;margin:16px 0;">توزيع أعداد الحجاج الذكور لعام 1446هـ</div>
+            <div style="position:relative;width:100%;height:520px;" id="chart-male">
+              <div class="donut-center" id="center-male">858,593<span style="font-size:16px;color:#666;">إجمالي الذكور</span></div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const donutOptions = (data, colors, title) => ({
+        chart:{ type:'pie', height:420, width:420, spacing:[0,0,0,0], backgroundColor:'transparent' },
+        title:{ text:null },
+        plotOptions:{
+          pie:{
+            animation:{ duration:6000 }, innerSize:'52%', size:'70%', colors,
+            dataLabels:{
+              enabled:true,
+              format:'<b>{point.percentage:.1f}%</b><br>{point.y:,.0f}',
+              style:{ fontSize:'14px', fontWeight:'800', textOutline:'2px contrast', color:'#000' },
+              connectorWidth:1, connectorColor:'#888'
+            },
+            showInLegend:true
+          }
+        },
+        legend:{
+          align:'center', verticalAlign:'bottom', rtl:true,
+          itemStyle:{ fontSize:'14px', fontFamily:"'Almarai',sans-serif", color:'#495057' }
+        },
+        series:[{ name:title, data }]
+      });
+
+      setTimeout(()=>{
+        const gradientDark = {
+          radialGradient:{ cx:0.5, cy:0.5, r:0.8 },
+          stops:[[0,'#c8b06a'],[0.5,'#f2db8a'],[1,'#c8b06a']]
+        };
+        const gradientLight = {
+          radialGradient:{ cx:0.5, cy:0.5, r:0.8 },
+          stops:[[0,'#9f9f9d'],[0.5,'#d3d3d3'],[1,'#9f9f9d']]
+        };
+
+        Highcharts.chart('chart-female', donutOptions(
+          [{ name:'داخل', y:78343 }, { name:'خارج', y:717046 }],
+          [gradientLight, gradientDark], 'الإناث'
+        ));
+        Highcharts.chart('chart-male', donutOptions(
+          [{ name:'داخل', y:88311 }, { name:'خارج', y:789530 }],
+          [gradientLight, gradientDark], 'الذكور'
+        ));
+        Highcharts.chart('chart-total', donutOptions(
+          [{ name:'ذكور', y:877841 }, { name:'إناث', y:795389 }],
+          [gradientLight, gradientDark], 'الإجمالي'
+        ));
+        Highcharts.chart('chart-inside-outside', donutOptions(
+          [{ name:'داخل', y:166654 }, { name:'خارج', y:1506576 }],
+          [gradientLight, gradientDark], 'الإجمالي'
+        ));
+      }, 80);
+    }
+
+    function SixthPage(){
+      viewEl.innerHTML = `
+        <div class="inside-gender-container">
+          <div class="org-structure" style="margin-top:10px;">
+            <div class="level" style="gap:20px;">
+              <div class="node" style="min-width:280px;min-height:220px;">
+                <div class="node-icon"><svg viewBox="0 0 64 64"><circle cx="32" cy="18" r="10"/><path d="M35 32h9a2 2 0 0 1 2 2v26h-8V48h-6v12h-8V34a2 2 0 0 1 2-2h9z"/></svg></div>
+                <div class="node-label">إناث</div>
+                <div class="node-number">78,343</div>
+                <div class="node-percent">47%</div>
+              </div>
+
+              <div class="node" style="min-width:320px;min-height:240px;border-color:var(--brand);border-width:3px;">
+                <div class="node-icon"><svg viewBox="0 0 512 512"><circle cx="135" cy="42" r="40"/></svg></div>
+                <div class="node-label">إجمالي الحجاج</div>
+                <div class="node-number">166,645</div>
+                <div class="node-text">حاج/حاجة</div>
+              </div>
+
+              <div class="node" style="min-width:280px;min-height:220px;">
+                <div class="node-icon"><svg viewBox="0 0 48 48"><circle cx="24" cy="12" r="8"/></svg></div>
+                <div class="node-label">الذكور</div>
+                <div class="node-number">88,311</div>
+                <div class="node-percent">53%</div>
+              </div>
+            </div>
+
+            <div class="header-box">
+              <div class="header-text">من بين كل <strong>100</strong> حاج من حجاج الداخل لعام <strong>1446هـ</strong>: يوجد <strong>53</strong> حاجاً من الذكور</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function SeventhPage(){
+      viewEl.innerHTML = `
+        <div class="org-structure" style="margin-top:10px;">
+          <div class="level level-1">
+            <div class="node">
+              <div class="node-icon"><svg viewBox="0 0 24 24"><path fill="#fff" d="M12 2a5 5 0 0 1 5 5v3h-2V7a3 3 0 1 0-6 0v3H7V7a5 5 0 0 1 5-5Z"/></svg></div>
+              <div class="node-label">إجمالي حجاج الداخل</div>
+              <div class="node-number">166,645</div>
+              <div class="node-percent">10%</div>
+            </div>
+          </div>
+
+          <div class="vertical-line"></div>
+          <div class="connector-circle"></div>
+          <div class="branch-line"></div>
+
+          <div class="level level-2">
+            <div class="level-wrapper">
+              <div class="node">
+                <div class="node-icon"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="#fff"/></svg></div>
+                <div class="node-label">إجمالي السعوديين</div>
+                <div class="node-number">112,991</div>
+                <div class="node-percent">68%</div>
+              </div>
+
+              <div class="vertical-line"></div>
+              <div class="connector-circle"></div>
+              <div class="branch-line" style="width:80%"></div>
+
+              <div class="level level-3">
+                <div class="node">
+                  <div class="node-icon"><svg viewBox="0 0 48 48"><circle cx="24" cy="12" r="8"/></svg></div>
+                  <div class="node-label">الحجاج السعوديين من الذكور</div>
+                  <div class="node-number">53,479</div>
+                  <div class="node-percent">47%</div>
+                </div>
+                <div class="node">
+                  <div class="node-icon"><svg viewBox="0 0 64 64"><circle cx="32" cy="18" r="10"/></svg></div>
+                  <div class="node-label">الحجاج السعوديين من الإناث</div>
+                  <div class="node-number">59,512</div>
+                  <div class="node-percent">53%</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="level-wrapper">
+              <div class="node">
+                <div class="node-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20z"/></svg></div>
+                <div class="node-label">إجمالي الغير سعوديين</div>
+                <div class="node-number">53,663</div>
+                <div class="node-percent">32%</div>
+              </div>
+
+              <div class="vertical-line"></div>
+              <div class="connector-circle"></div>
+              <div class="branch-line" style="width:80%"></div>
+
+              <div class="level level-3">
+                <div class="node">
+                  <div class="node-icon"><svg viewBox="0 0 48 48"><circle cx="24" cy="12" r="8"/></svg></div>
+                  <div class="node-label">الحجاج الغير سعوديين من الذكور</div>
+                  <div class="node-number">34,832</div>
+                  <div class="node-percent">65%</div>
+                </div>
+                <div class="node">
+                  <div class="node-icon"><svg viewBox="0 0 64 64"><circle cx="32" cy="18" r="10"/></svg></div>
+                  <div class="node-label">الحجاج الغير سعوديين من الإناث</div>
+                  <div class="node-number">18,831</div>
+                  <div class="node-percent">35%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="header-box">
+            <div class="header-text">من بين كل <strong>100</strong> حاج من حجاج الداخل لعام <strong>1446هـ</strong>: يوجد <strong>68</strong> حاج سعودي، منهم 36 من الإناث</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function EighthPage(){
+      viewEl.innerHTML = `
+        <div class="inside-gender-container">
+          <div class="org-structure" style="margin-top:10px;">
+            <div class="level" style="gap:20px;">
+              <div class="node" style="min-width:280px;min-height:220px;">
+                <div class="node-icon"><svg viewBox="0 0 48 48"><circle cx="24" cy="12" r="8"/></svg></div>
+                <div class="node-label">إجمالي الإناث</div>
+                <div class="node-number">717,046</div>
+                <div class="node-percent">48%</div>
+              </div>
+
+              <div class="node" style="min-width:320px;min-height:240px;border-color:var(--brand);border-width:3px;">
+                <div class="node-icon"><svg viewBox="0 0 512 512"><circle cx="372" cy="44" r="42"/></svg></div>
+                <div class="node-label">إجمالي حجاج الخارج</div>
+                <div class="node-number">1,506,576</div>
+                <div class="node-percent">90%</div>
+              </div>
+
+              <div class="node" style="min-width:280px;min-height:220px;">
+                <div class="node-icon"><svg viewBox="0 0 48 48"><circle cx="24" cy="12" r="8"/></svg></div>
+                <div class="node-label">إجمالي الذكور</div>
+                <div class="node-number">789,530</div>
+                <div class="node-percent">52%</div>
+              </div>
+            </div>
+
+            <div class="header-box" style="margin-top:16px;">
+              <div class="header-text">من بين كل <strong>100</strong> حاج من حجاج الخارج لعام <strong>1446هـ</strong>: يوجد <strong>52</strong> حاجاً من الذكور</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
 
     function NinthPage(){
       viewEl.innerHTML = `
         <div class="chart-card chart-card-line">
           <div class="chart-title">توزيع حجاج الخارج وفقًا لوسيلة القُدوم والنوع لعام 1446هـ</div>
-          <div id="chart-transport"></div>
-          <div style="text-align:center;margin-top:8px;font-size:16px;color:#495057;font-weight:bold;">
+          <div id="chart-transport" class="hc-590"></div>
+          <div style="text-align:center;margin-top:8px;font-size:16px;color:#495057;font-weight:800;">
             من بين كل 100 حاج من حجاج الخارج قدم 95 حاج جوًا في موسم حج 1446هـ.
           </div>
-        </div>`;
-      setTimeout(()=>{ Highcharts.chart('chart-transport',{
-        chart:{ type:'column', height:560 },
-        title:{ text:null },
-        xAxis:{ categories:['نقل بحري','نقل بري','نقل جوي'], labels:{ style:{fontSize:'14px'} } },
-        yAxis:{ title:{text:null}, labels:{enabled:false} },
-        plotOptions:{ column:{
-          animation:{duration:5000}, grouping:true, pointPadding:0.15, borderWidth:0,
-          dataLabels:{ enabled:true, useHTML:true, formatter(){ const pct=this.point.customPercentage.toFixed(1); return `<div style="font-weight:700;color:#212529;font-size:14px;">${this.y.toLocaleString()} <span style="font-size:11px;color:#495057;">%${pct}</span></div>`; }, style:{textOutline:'none'}, y:-18, verticalAlign:'top' }
-        }},
-        series:[
-          {name:'إناث', data:[{y:2263,customPercentage:44.4},{y:29955,customPercentage:45.0},{y:684828,customPercentage:47.7}],
-           color:{linearGradient:{x1:1,y1:0,x2:0,y2:0},stops:[[0,'#c5ad68'],[.5,'#f3dc8a'],[1,'#c5ad68']]}},
-          {name:'ذكور', data:[{y:2831,customPercentage:55.5},{y:36510,customPercentage:54.9},{y:750189,customPercentage:52.2}],
-           color:{linearGradient:{x1:1,y1:0,x2:0,y2:0},stops:[[0,'#9d9e9d'],[.5,'#d6d7d6'],[1,'#9d9e9d']]}}
-        ],
-        legend:{align:'center',verticalAlign:'bottom',layout:'horizontal',itemStyle:{fontSize:'15px'},symbolRadius:7,symbolHeight:10,symbolWidth:10,y:10}
-      }); },80);
+        </div>
+      `;
+      setTimeout(()=>{
+        Highcharts.chart('chart-transport', {
+          chart:{ type:'column', height:590 },
+          title:{ text:null },
+          xAxis:{
+            categories:['نقل بحري','نقل بري','نقل جوي'],
+            labels:{ style:{ fontSize:'14px' } }
+          },
+          yAxis:{ title:{ text:null }, labels:{ enabled:false } },
+          plotOptions:{
+            column:{
+              animation:{ duration:7000 }, pointPadding:0.15, borderWidth:0,
+              dataLabels:{
+                enabled:true, useHTML:true, style:{ textOutline:'none' }, y:-18, verticalAlign:'top',
+                formatter:function(){
+                  const pct = this.point.customPercentage?.toFixed(1) ?? 0;
+                  return `<div style="font-weight:800;color:#212529;font-size:14px;">
+                    ${this.y.toLocaleString()} <span style="font-size:11px;color:#495057;">%${pct}</span></div>`;
+                }
+              }
+            }
+          },
+          series:[
+            {
+              name:'إناث',
+              data:[
+                { y:2263,  customPercentage:44.4 },
+                { y:29955, customPercentage:45.0 },
+                { y:684828,customPercentage:47.7 }
+              ],
+              color:{ linearGradient:{x1:1,y1:0,x2:0,y2:0}, stops:[[0,'#c5ad68'],[0.5,'#f3dc8a'],[1,'#c5ad68']] }
+            },
+            {
+              name:'ذكور',
+              data:[
+                { y:2831,  customPercentage:55.5 },
+                { y:36510, customPercentage:54.9 },
+                { y:750189,customPercentage:52.2 }
+              ],
+              color:{ linearGradient:{x1:1,y1:0,x2:0,y2:0}, stops:[[0,'#9d9e9d'],[0.5,'#d6d7d6'],[1,'#9d9e9d']] }
+            }
+          ],
+          legend:{ align:'center', verticalAlign:'bottom', layout:'horizontal', itemStyle:{ fontSize:'14px' } }
+        });
+      }, 60);
     }
 
     function TenthPage(){
       viewEl.innerHTML = `
         <div class="chart-card chart-card-line">
           <div class="chart-title">توزيع أعداد حجاج الخارج وفقًا لمجموعات الدول لعام 1446هـ</div>
-          <div id="chart-country"></div>
-          <div style="text-align:center;margin-top:8px;font-size:16px;color:#495057;font-weight:bold;">
+          <div id="chart-country" class="hc-590"></div>
+          <div style="text-align:center;margin-top:8px;font-size:16px;color:#495057;font-weight:800;">
             من كل 10 حجاج من الخارج هناك 6 حجاج من الدول الآسيوية غير العربية في عام 1446هـ.
           </div>
-        </div>`;
-      setTimeout(()=>{ Highcharts.chart('chart-country',{
-        chart:{ type:'column', height:560 },
-        title:{ text:null },
-        xAxis:{ categories:['أمريكا وأستراليا','مجلس التعاون','أوروبا','إفريقيا غير العربية','الدول العربية (غير الخليج)','آسيا غير العربية'], labels:{ style:{fontSize:'14px'} }, tickLength:0 },
-        yAxis:{ title:{text:null}, labels:{enabled:false}, gridLineWidth:0 },
-        plotOptions:{ column:{ animation:{duration:5000}, borderRadius:4, pointPadding:0.12, borderWidth:0,
-          dataLabels:{ enabled:true, formatter(){ const total=1506576; const pct=((this.y/total)*100).toFixed(1); return `<div style="font-weight:700;color:#212529;">${this.y.toLocaleString()}</div><div style="font-size:13px;color:#495057;">%${pct}</div>`; }, style:{fontSize:'14px',textOutline:'none'}, y:-10, verticalAlign:'top' }
-        }},
-        series:[{ name:'عدد الحجاج', data:[466,37507,33044,196542,334657,904360], showInLegend:false,
-          color:{linearGradient:{x1:1,y1:0,x2:0,y2:0},stops:[[0,'#c5ad68'],[.5,'#f3dc8a'],[1,'#c5ad68']]}}]
-      }); },80);
+        </div>
+      `;
+      setTimeout(()=>{
+        Highcharts.chart('chart-country', {
+          chart:{ type:'column', height:590 }, title:{ text:null },
+          xAxis:{
+            categories:['أمريكا وأستراليا','مجلس التعاون','أوروبا','إفريقيا غير العربية','الدول العربية (غير الخليج)','آسيا غير العربية'],
+            labels:{ style:{ fontSize:'14px' }, y:20 }, tickLength:0
+          },
+          yAxis:{ title:{ text:null }, labels:{ enabled:false }, gridLineWidth:0 },
+          plotOptions:{
+            column:{
+              animation:{ duration:5000 }, borderRadius:4, pointPadding:0.12, borderWidth:0,
+              dataLabels:{
+                enabled:true, y:-10, verticalAlign:'top', style:{ fontSize:'14px', textOutline:'none' },
+                formatter:function(){
+                  const total = 1506576;
+                  const pct = ((this.y/total)*100).toFixed(1);
+                  return `<div style="font-weight:800;color:#212529;">${this.y.toLocaleString()}</div>
+                          <div style="font-size:13px;color:#495057;">%${pct}</div>`;
+                }
+              }
+            }
+          },
+          tooltip:{
+            backgroundColor:'rgba(255,255,255,0.96)', borderColor:'#ddd', borderRadius:6,
+            style:{ color:'#333', fontSize:'13px', fontFamily:"'Almarai',sans-serif" },
+            headerFormat:'<div style="font-size:12px;font-weight:800;margin-bottom:8px;">{point.x}</div>',
+            pointFormat:'<div style="font-size:12px;">{point.y} حاج<br><span style="font-size:12px;">%{point.percentage:.1f} من إجمالي حجاج الخارج</span></div>'
+          },
+          series:[{
+            name:'عدد الحجاج',
+            data:[466, 37507, 33044, 196542, 334657, 904360],
+            showInLegend:false,
+            color:{ linearGradient:{x1:1,y1:0,x2:0,y2:0}, stops:[[0,'#c5ad68'],[0.5,'#f3dc8a'],[1,'#c5ad68']] }
+          }]
+        });
+      }, 60);
     }
 
     function EleventhPage(){
       viewEl.innerHTML = `
         <div class="chart-card chart-card-line">
           <div class="chart-title">عدد زوار مجمّع الملك عبدالعزيز لكسوة الكعبة لعامي 1445 و1446هـ</div>
-          <div id="chart-visitors"></div>
-        </div>`;
-      const months=['محرم','صفر','ربيع الأول','ربيع الثاني','جمادى الأولى','جمادى الثانية','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'];
-      const data1446=[4299,3922,5879,8572,10967,13520,14301,10393,2186,2210,2387,4359];
-      const data1445=[572,527,50,1982,3544,768,4742,2613,2186,2210,2387,4359];
-      setTimeout(()=>{ Highcharts.chart('chart-visitors',{
-        chart:{ type:'line', height:560 }, title:{ text:null },
-        xAxis:{ categories:months, labels:{ style:{fontSize:'14px'} } },
-        yAxis:{ title:{ text:null }, labels:{ enabled:false } },
-        legend:{ enabled:true, align:'center', verticalAlign:'bottom', layout:'horizontal', itemStyle:{fontSize:'15px'}, symbolRadius:7, symbolHeight:10, symbolWidth:10, y:10 },
-        plotOptions:{ line:{ animation:{duration:5000}, lineWidth:4, marker:{radius:4,symbol:'circle'},
-          dataLabels:{ enabled:true, formatter(){return this.y;}, style:{fontWeight:'700',fontSize:'13px',textOutline:'none'}, y:-10 } } },
-        series:[{ name:'1446هـ', data:data1446, color:'#495057' },{ name:'1445هـ', data:data1445, color:'#f4df8f' }],
-        tooltip:{ enabled:false }
-      }); },80);
+          <div id="chart-visitors" class="hc-590"></div>
+        </div>
+      `;
+      const months = ['محرم','صفر','ربيع الأول','ربيع الثاني','جمادى الأولى','جمادى الثانية','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'];
+      const data1446 = [4299,3922,5879,8572,10967,13520,14301,10393,2186,2210,2387,4359];
+      const data1445 = [572,527,50,1982,3544,768,4742,2613,2186,2210,2387,4359];
+      setTimeout(()=>{
+        Highcharts.chart('chart-visitors', {
+          chart:{ type:'line', height:590 }, title:{ text:null },
+          xAxis:{ categories:months, labels:{ style:{ fontSize:'14px' } } },
+          yAxis:{ title:{ text:null }, labels:{ enabled:false } },
+          legend:{ enabled:true, align:'center', verticalAlign:'bottom', layout:'horizontal',
+            itemStyle:{ fontSize:'14px', fontWeight:'normal' },
+            symbolRadius:7, symbolHeight:10, symbolWidth:10, y:10
+          },
+          plotOptions:{
+            line:{
+              animation:{ duration:5000 }, lineWidth:4, marker:{ radius:4, symbol:'circle' },
+              dataLabels:{ enabled:true, formatter(){ return this.y; }, style:{ fontWeight:'800', fontSize:'13px', textOutline:'none' }, y:-10 }
+            }
+          },
+          series:[
+            { name:'1446هـ', data:data1446, color:'#495057' },
+            { name:'1445هـ', data:data1445, color:'#f4df8f' }
+          ],
+          tooltip:{ enabled:false }
+        });
+      }, 60);
     }
 
+    /* ====== بدء العرض ====== */
     function init(){ buildDots(); goTo(0); startAuto(); startBar(); }
     init();
   </script>

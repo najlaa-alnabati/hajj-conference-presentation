@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>إحصائيات الحجاج - عرض دوري متكامل (1920×1080)</title>
 
-  <!-- خط و Highcharts -->
   <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/11.2.0/highcharts.min.js"></script>
 
@@ -32,7 +31,6 @@
       overflow:hidden; /* لأننا نستخدم لوح ثابت */
     }
 
-    /* حاوية خارجية مسؤولة عن ضبط القياس */
     .viewport{
       position:fixed;
       inset:0;
@@ -40,7 +38,6 @@
       place-items:center;
       overflow:hidden;
     }
-    /* لوح العرض بدقة 1920×1080 */
     .stage-1920x1080{
       width:var(--stage-w);
       height:var(--stage-h);
@@ -49,14 +46,12 @@
       box-shadow:0 8px 30px rgba(0,0,0,0.12);
       border:3px solid var(--line);
       transform-origin:center center;
-      /* منع تسلّق المحتوى خارج اللوح عند التحجيم */
       overflow:hidden;
       display:flex;
       flex-direction:column;
       position:relative;
     }
 
-    /* رأس علوي كبسولة */
     .header-pill{
       position:relative;
       display:flex;
@@ -69,7 +64,6 @@
       font-size:26px;
       font-weight:800;
     }
-    /* اللوقو يمين */
     .header-pill .logo-inside{
       position:absolute;
       right:16px;
@@ -79,7 +73,6 @@
       width:auto;
     }
 
-    /* إطار المحتوى */
     .frame{
       flex:1;
       display:flex;
@@ -89,7 +82,6 @@
       overflow:hidden;
     }
 
-    /* مساحة العرض المتبدّل */
     .view{
       flex:1;
       min-height:0; /* مهم جداً مع flex:1 */
@@ -103,7 +95,6 @@
     .fade-out{opacity:0;}
     .fade-in{opacity:1;}
 
-    /* سطر المصدر + أدوات التحكّم + الشريط */
     .source-attribution{
       font-size:16px;color:var(--muted);text-align:right;
     }
@@ -131,7 +122,6 @@
     .progress{height:4px;background:#e0e0e0;border-radius:999px;overflow:hidden;}
     .progress-fill{height:100%;background:var(--brand);width:0%;transition:width .1s linear;}
 
-    /* كروت ورسوم */
     .chart-card{background:#fafafa;border:1px solid #e0e0e0;border-radius:10px;padding:18px 16px;}
     .chart-card-line{min-height:0;}
     .chart-title{font-size:20px;color:#2c3e50;margin-bottom:12px;text-align:center;font-weight:800;border-bottom:2px solid #e0e0e0;padding-bottom:10px;}
@@ -155,7 +145,6 @@
     }
     .donut-center span{display:block;font-size:14px;color:#666;margin-top:5px;}
 
-    /* بطاقات الأرقام والهيكل */
     .top-stats{
       display:flex;gap:18px;justify-content:center;align-items:center;margin:8px 0 8px;flex-wrap:wrap;margin-top:20px;
     }
@@ -166,9 +155,9 @@
     .icon-circle{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff;border:3px solid var(--line);}
     .icon-circle svg{width:28px;height:28px;fill:#6c757d;}
     .stat-info{text-align:right;}
-    .stat-number{font-size:28px;font-weight:800;color:var(--text);direction:ltr;}
-    .stat-label{font-size:14px;color:var(--muted);margin-top:4px;font-weight:600;}
-    .percentage-badge{font-size:20px;font-weight:800;color:#495057;min-width:50px;text-align:center;}
+    .stat-number{font-size:30px;font-weight:800;color:var(--text);direction:ltr;}
+    .stat-label{font-size:18px;color:var(--muted);margin-top:4px;font-weight:600;}
+    .percentage-badge{font-size:22px;font-weight:800;color:#495057;min-width:50px;text-align:center;}
 
     .org-structure{
       display:flex;flex-direction:column;align-items:center;gap:8px;min-height:0;margin-top: 40px;
@@ -176,17 +165,17 @@
     .level{display:flex;justify-content:center;gap:10px;position:relative;width:100%;}
     .level-wrapper{display:flex;flex-direction:column;align-items:center;flex:1;}
     .node{
-      background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.06);min-width:260px;min-height:140px;
+      background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.06);min-width:300px;min-height:160px;
     }
     .level-1 .node{border-color:var(--brand);border-width:3px;}
     .level-2 .node{border-color:var(--brand);}
     .level-3 .node{border-color:var(--line);}
-    .node-icon{width:28px;height:28px;margin:6px auto 8px;display:flex;align-items:center;justify-content:center;background:var(--brand);border-radius:50%;}
+    .node-icon{margin-bottom:10px;width:28px;height:28px;margin:6px auto 8px;display:flex;align-items:center;justify-content:center;background:var(--brand);border-radius:50%;}
     .node-icon svg{width:16px;height:16px;fill:#fff;}
-    .node-label{font-size:16px;color:var(--muted);margin-bottom:6px;}
-    .node-number{font-size:26px;font-weight:800;color:var(--text);direction:ltr;}
-    .node-text{font-size:14px;color:var(--muted);margin-top:3px;}
-    .node-percent{font-size:18px;font-weight:800;color:var(--brand);margin-top:3px;}
+    .node-label{font-size:18px;color:var(--muted);margin-bottom:6px;}
+    .node-number{font-size:28px;font-weight:800;color:var(--text);direction:ltr;}
+    .node-text{font-size:16px;color:var(--muted);margin-top:3px;}
+    .node-percent{font-size:20px;font-weight:800;color:var(--brand);margin-top:3px;}
     .vertical-line{width:2px;height:8px;background:var(--line);margin:0 auto;}
     .connector-circle{width:16px;height:16px;background:#fff;border:2px solid var(--line);border-radius:50%;margin:0 auto;}
     .branch-line{width:70%;height:2px;background:var(--line);margin:2px auto;}
@@ -194,12 +183,11 @@
     .header-box{
       background:linear-gradient(to left, var(--gold-1) 0%, var(--gold-2) 50%, var(--gold-1) 100%);
       padding:20px;text-align:center;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.08);
-      width:min(100%, 1120px);margin:20px auto 0;
+      width:min(100%, 1350px);margin:20px auto 0;
     }
     .header-text{color:#404042;font-size:22px;font-weight:500;line-height:1.7;}
     .header-text strong{font-weight:800;font-size:24px;}
 
-    /* رفع ارتفاع الرسوم */
     .hc-700{height:700px;}
     .hc-640{height:760px;}  /* كانت 640 → 760 */
     .hc-600{height:600px;}
@@ -216,10 +204,8 @@
 </head>
 <body>
   <div class="viewport">
-    <!-- لوح 1920×1080 -->
     <div id="stage" class="stage-1920x1080">
       <div class="header-pill">
-        <!-- اللوقو صار يمين -->
         <img src="mathabh-logo-white.svg" alt="شعار المجمع" class="logo-inside" />
         <span id="headerTitle">إحصائيات الحجاج</span>
       </div>
@@ -241,7 +227,6 @@
   </div>
 
   <script>
-    /* ====== مقياس تلقائي لملاءمة اللوح داخل أي نافذة ====== */
     (function autoScaleStage(){
       const stage = document.getElementById('stage');
       function fit(){
@@ -254,7 +239,6 @@
       fit();
     })();
 
-    /* ====== إعدادات Highcharts العامة ====== */
     Highcharts.setOptions({
       lang: { thousandsSep: ',' },
       chart: { style: { fontFamily: "'Almarai','Segoe UI',sans-serif" }, backgroundColor: 'transparent' },
@@ -271,7 +255,6 @@
       exporting: { enabled: false }
     });
 
-    /* ====== عناصر DOM عامة ====== */
     const viewEl = document.getElementById('view');
     const titleEl = document.getElementById('viewTitle');
     const dotsEl = document.getElementById('dots');
@@ -279,10 +262,8 @@
     const pauseBtn = document.getElementById('pauseBtn');
     const headerTitleEl = document.getElementById('headerTitle');
 
-    /* ====== بيانات مشتركة ====== */
     const categories = ['1424','1425','1426','1427','1428','1429','1430','1431','1432','1433','1434','1435','1436','1437','1438','1439','1440','1441','1442','1443','1444','1445','1446'];
 
-    /* ====== قائمة الشرائح (العروض) ====== */
     const views = [
       { key: 'total-area',    title: 'تطور أعداد الحجاج',               render: FirstPage },
       { key: 'outside-area',  title: 'تطور أعداد الحجاج',               render: SecondPage },
@@ -294,7 +275,6 @@
       { key: 'outside-1446',  title: 'حجاج الخارج 1446هـ',              render: EighthPage },
       { key: 'page9',         title: 'حجاج الخارج 1446هـ',              render: NinthPage },
       { key: 'page10',        title: 'حجاج الخارج 1446هـ',              render: TenthPage }
-      /* تمت إزالة EleventhPage (الرسمة الحادية عشر) */
     ];
 
     let current = 0, paused = false, tick = null, bar = null, prog = 0;
@@ -343,18 +323,14 @@
     function togglePause(){ paused = !paused; pauseBtn.textContent = paused ? 'تشغيل' : 'إيقاف مؤقت'; }
     pauseBtn.addEventListener('click', togglePause);
 
-    /* =========================================================
-       الصفحات / الدوال (ارتفاعات أكبر)
-       ========================================================= */
-
     function FirstPage(){
       viewEl.innerHTML = '<div id="chartTotal" class="hc-640"></div>';
       setTimeout(()=>{
         Highcharts.chart('chartTotal', {
           chart:{ type:'area', height:765 }, /* كان 640 */
-          title:{ text:'تطور أعداد حجاج الداخل والخارج والإجمالي خلال الفترة من 1424هـ إلى 1446هـ', style:{ fontSize:'20px', fontWeight:'800' }},
+          title:{ text:'تطور أعداد حجاج الداخل والخارج والإجمالي خلال الفترة من 1424هـ إلى 1446هـ', style:{ fontSize:'22px', fontWeight:'600' }},
           xAxis:{ categories,
-            plotBands:[{ from:16.5, to:18.5, color:'rgba(203,203,203,.16)', label:{ text:'جائحة كورونا', style:{ color:'#313632', fontWeight:'800' }}}]
+            plotBands:[{ from:16.5, to:18.5, color:'rgba(203,203,203,.16)', label:{ text:'جائحة كورونا', style:{ color:'#313632', fontWeight:'800',fontSize:'18px'}}}]
           },
           yAxis:{ title:{ text:'' }, labels:{ formatter(){ return this.value.toLocaleString(); } } },
           tooltip:{ shared:true, useHTML:true,
@@ -362,7 +338,7 @@
             pointFormat:'<span style="color:{point.color}">●</span> {series.name}: <b>{point.y:,.0f}</b><br/>',
           },
           legend:{ enabled:true, align:'center', verticalAlign:'bottom', layout:'horizontal',
-            itemStyle:{ fontSize:'14px' }, symbolRadius:7, symbolHeight:10, symbolWidth:10, y:10 },
+            itemStyle:{ fontSize:'18px' }, symbolRadius:7, symbolHeight:10, symbolWidth:10, y:14 },
           plotOptions:{ area:{ animation:{ duration:8000 }, fillOpacity:.4, lineWidth:2, marker:{ enabled:true, radius:3 }}},
           series:[
             { name:'حجاج الداخل', data:[592368,629710,700603,724229,746511,679008,699313,989798,1099522,1408641,600718,696185,567876,537537,600108,612953,634379,1000,58745,144653,184130,221854,166654],
@@ -381,9 +357,9 @@
       setTimeout(()=>{
         Highcharts.chart('chartOutside', {
           chart:{ type:'area', height:765 }, /* كان 640 */
-          title:{ text:'تطور أعداد حجاج الخارج خلال الفترة من 1424هـ إلى 1446هـ', style:{ fontSize:'20px', fontWeight:'800' } },
+          title:{ text:'تطور أعداد حجاج الخارج خلال الفترة من 1424هـ إلى 1446هـ', style:{ fontSize:'22px', fontWeight:'600' } },
           xAxis:{ categories,
-            plotBands:[{ from:16.5, to:18.5, color:'rgba(203,203,203,.16)', label:{ text:'جائحة كورونا', style:{ color:'#313632', fontWeight:'800' }}}]
+            plotBands:[{ from:16.5, to:18.5, color:'rgba(203,203,203,.16)', label:{ text:'جائحة كورونا', style:{ color:'#313632', fontWeight:'800', fontSize:'18px' }}}]
           },
           yAxis:{ title:{ text:'' }, labels:{ formatter(){ return this.value.toLocaleString(); } } },
           plotOptions:{ area:{ animation:{ duration:8000 }, fillOpacity:.4, lineWidth:2, marker:{ enabled:true, radius:3 } } },
@@ -402,9 +378,9 @@
       setTimeout(()=>{
         Highcharts.chart('chartInside', {
           chart:{ type:'area', height:765 }, /* كان 640 */
-          title:{ text:'تطور أعداد حجاج الداخل خلال الفترة من 1424هـ إلى 1446هـ', style:{ fontSize:'20px', fontWeight:'800' } },
+          title:{ text:'تطور أعداد حجاج الداخل خلال الفترة من 1424هـ إلى 1446هـ', style:{ fontSize:'22px', fontWeight:'600' } },
           xAxis:{ categories,
-            plotBands:[{ from:16.5, to:18.5, color:'rgba(203,203,203,.16)', label:{ text:'جائحة كورونا', style:{ color:'#313632', fontWeight:'800' }}}]
+            plotBands:[{ from:16.5, to:18.5, color:'rgba(203,203,203,.16)', label:{ text:'جائحة كورونا', style:{ color:'#313632', fontWeight:'800', fontSize:'18px' }}}]
           },
           yAxis:{ title:{ text:'' }, labels:{ formatter(){ return this.value.toLocaleString(); } } },
           plotOptions:{ area:{ animation:{ duration:8000 }, fillOpacity:.4, lineWidth:2, marker:{ enabled:true, radius:3 } } },
@@ -424,11 +400,11 @@
   <div class="top-stats" style="display:flex;justify-content:center;gap:40px;background:#f1f1f1;padding:30px 0;border-radius:10px;direction:rtl;">
   
   <!-- بطاقة الذكور -->
-  <div class="stat-item" style="background:#fff;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.08);padding:25px 30px;display:flex;align-items:center;gap:25px;width:400px;">
+  <div class="stat-item" style="background:#fff;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.08);padding:25px 30px;display:flex;align-items:center;gap:15px;width:500px;">
     <!-- النسبة -->
     <div class="percentage-circle" style="background:#495057;color:#fff;min-width:45px;min-height:45px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;">52%</div>
     <!-- الأيقونة -->
-    <div class="icon-circle" style="background:#495057;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+    <div class="icon-circle" style="background:#495057;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-left:30px;">
       <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
         <path d="m36.7 24.13a28.273 28.273 0 0 0 -8.53-3.67 13.457 13.457 0 0 0 4.83-9.75 8.872 8.872 0 0 0 -9-8.71 8.872 8.872 0 0 0 -9 8.71 13.457 13.457 0 0 0 4.83 9.75 28.273 28.273 0 0 0 -8.53 3.67 6.815 6.815 0 0 0 -3.3 5.87v15a1 1 0 0 0 1 1h30a1 1 0 0 0 1-1v-14.92a6.978 6.978 0 0 0 -3.3-5.95z" fill="#fff"/>
       </svg>
@@ -441,11 +417,11 @@
   </div>
 
   <!-- بطاقة الإناث -->
-  <div class="stat-item" style="background:#fff;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.08);padding:25px 30px;display:flex;align-items:center;gap:25px;width:400px;">
+  <div class="stat-item" style="background:#fff;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.08);padding:25px 30px;display:flex;align-items:left;gap:15px;width:500px;">
     <!-- النسبة -->
     <div class="percentage-circle" style="background:#495057;color:#fff;min-width:45px;min-height:45px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;">48%</div>
     <!-- الأيقونة -->
-    <div class="icon-circle" style="background:#495057;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+    <div class="icon-circle" style="background:#495057;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-left:30px;">
       <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
            <path d="m39.062 46.801c-2.892 1.602-4.686 3.946-7.353 4.973-6.033 2.65-13.623 2.434-18.043-1.754-.505-.307-1.137-1.957-1.453-1.281a9.528 9.528 0 0 0 -2.498 6.61v4.651h23.738a30.793 30.793 0 0 0 9.85-14.426 11.183 11.183 0 0 0 -4.242 1.227z" fill="#fff"/>
             <path d="m51.916 48.868a10.011 10.011 0 0 0 -6.362-3.251 32.555 32.555 0 0 1 -8.785 14.383h17.515v-4.651a9.66 9.66 0 0 0 -2.368-6.481z" fill="#fff"/>
@@ -585,25 +561,25 @@
       viewEl.innerHTML = `
         <div class="chart-container">
           <div class="chart-card-donut">
-            <div style="color:#484948;font-size:16px;font-weight:800;margin:16px 0;margin-top:35px;margin-bottom:55px;">توزيع أعداد الحجاج لعام 1446هـ</div>
+            <div style="color:#484948;font-size:20px;font-weight:600;margin:16px 0;margin-top:35px;margin-bottom:75px;">توزيع أعداد الحجاج لعام 1446هـ</div>
             <div style="position:relative;width:100%;height:520px;" id="chart-inside-outside">
               <div class="donut-center" id="center-io">1,656,243<span style="font-size:16px;color:#666;">إجمالي (تقريبي)</span></div>
             </div>
           </div>
           <div class="chart-card-donut">
-            <div style="color:#484948;font-size:16px;font-weight:800;margin:16px 0;margin-top:35px;margin-bottom:55px;">توزيع أعداد الحجاج لعام 1446هـ وفق النوع</div>
+            <div style="color:#484948;font-size:20px;font-weight:600;margin:16px 0;margin-top:35px;margin-bottom:75px;">توزيع أعداد الحجاج لعام 1446هـ وفق النوع</div>
             <div style="position:relative;width:100%;height:520px;" id="chart-total">
               <div class="donut-center" id="center-total">1,637,787<span style="font-size:16px;color:#666;">إجمالي الحجاج</span></div>
             </div>
           </div>
           <div class="chart-card-donut">
-            <div style="color:#484948;font-size:16px;font-weight:800;margin:16px 0;margin-top:35px;margin-bottom:55px;">توزيع أعداد الحجاج الإناث لعام 1446هـ</div>
+            <div style="color:#484948;font-size:20px;font-weight:600;margin:16px 0;margin-top:35px;margin-bottom:75px;">توزيع أعداد الحجاج الإناث لعام 1446هـ</div>
             <div style="position:relative;width:100%;height:520px;" id="chart-female">
               <div class="donut-center" id="center-female">779,194<span style="font-size:16px;color:#666;">إجمالي الإناث</span></div>
             </div>
           </div>
           <div class="chart-card-donut">
-            <div style="color:#484948;font-size:16px;font-weight:800;margin:16px 0;margin-top:35px;margin-bottom:55px;">توزيع أعداد الحجاج الذكور لعام 1446هـ</div>
+            <div style="color:#484948;font-size:20px;font-weight:600;margin:16px 0;margin-top:35px;margin-bottom:75px;">توزيع أعداد الحجاج الذكور لعام 1446هـ</div>
             <div style="position:relative;width:100%;height:520px;" id="chart-male">
               <div class="donut-center" id="center-male">858,593<span style="font-size:16px;color:#666;">إجمالي الذكور</span></div>
             </div>
@@ -620,7 +596,7 @@
             dataLabels:{
               enabled:true,
               format:'<b>{point.percentage:.1f}%</b><br>{point.y:,.0f}',
-              style:{ fontSize:'14px', fontWeight:'800', textOutline:'2px contrast', color:'#000' },
+              style:{ fontSize:'16px', fontWeight:'800', textOutline:'2px contrast', color:'#000' },
               connectorWidth:1, connectorColor:'#888'
             },
             showInLegend:true
@@ -628,7 +604,7 @@
         },
         legend:{
           align:'center', verticalAlign:'bottom', rtl:true,  y: 150,
-          itemStyle:{ fontSize:'14px', fontFamily:"'Almarai',sans-serif", color:'#495057' }
+          itemStyle:{ fontSize:'18px', fontFamily:"'Almarai',sans-serif", color:'#495057' }
         },
         series:[{ name:title, data }]
       });
@@ -668,7 +644,7 @@
     <style>
       .org-chart{
         display:flex;align-items:center;justify-content:center;flex-wrap:wrap;
-        gap:40px;margin:70px 0 20px;
+        gap:40px;margin:70px 0 20px;margin-top:90px;
       }
       .horizontal-connector{width:60px;height:3px;background:#dee2e6;flex-shrink:0;}
 
@@ -676,27 +652,27 @@
         display:flex;flex-direction:column;align-items:center;text-align:center;
         padding:20px;border-radius:16px;background:#fff;border:2px solid #dee2e6;
         box-shadow:0 4px 12px rgba(0,0,0,.08);
-        min-width:290px;min-height:340px;
+        min-width:400px;min-height:380px;
       }
       .circle-node.main-circle{
-        border-color:#495057;border-width:3px;min-width:330px;min-height:350px;
+        border-color:#495057;border-width:3px;min-width:400px;min-height:380px;
         padding:24px 20px;
       }
-      .circle-node.side-circle{min-width:200px;}
+      .circle-node.side-circle{min-width:330px;}
 
-      .circle-node .icon{margin-bottom:14px;}
-      .circle-node .label{font-size:26px;color:#6c757d;font-weight:600;margin-bottom:12px;}
+      .circle-node .icon{margin-bottom:25px;}
+      .circle-node .label{font-size:28px;color:#6c757d;font-weight:600;margin-bottom:12px;}
       .circle-node .number{
-        font-size:40px;font-weight:700;color:#212529;direction:ltr;font-feature-settings:"tnum";
+        font-size:45px;font-weight:700;color:#212529;direction:ltr;font-feature-settings:"tnum";
         margin-bottom:12px;
       }
-      .circle-node .text,.circle-node .percent{font-size:26px;color:#495057;font-weight:600;}
+      .circle-node .text,.circle-node .percent{font-size:30px;color:#495057;font-weight:600;}
 
       .header-box{
         background:linear-gradient(to left,#c6ae69 0%,#f2db8a 50%,#c6ae69 100%);
         padding:25px 30px;text-align:center;border-radius:10px;
         box-shadow:0 4px 12px rgba(0,0,0,.1);
-        max-width:860px;margin:100px auto 50px;
+        max-width:6000px;margin:100px auto 50px;
       }
       .header-text{color:#404042;font-size:25px;font-weight:400;line-height:1.7;}
       .header-text strong{font-weight:700;font-size:24px;}
@@ -782,7 +758,7 @@
 function SeventhPage() {
   const viewEl = document.getElementById('view');
   viewEl.innerHTML = `
-    <div class="org-structure" style="height: 670px; margin-top:30px;">
+    <div class="org-structure" style="height: 670px; margin-top:50px;">
       <!-- المستوى 1 -->
       <div class="level level-1">
         <div class="node">
@@ -834,7 +810,6 @@ function SeventhPage() {
               <div class="node-number">53,479</div>
               <div class="node-percent">47%</div>
             </div>
-
             <!-- إناث سعوديات -->
             <div class="node">
               <div class="node-icon">
@@ -851,7 +826,6 @@ function SeventhPage() {
             </div>
           </div>
         </div>
-
         <!-- إجمالي الغير سعوديين -->
         <div class="level-wrapper">
           <div class="node">
@@ -866,7 +840,6 @@ function SeventhPage() {
             <div class="node-number">53,663</div>
             <div class="node-percent">32%</div>
           </div>
-
           <div class="vertical-line"></div>
           <div class="connector-circle"></div>
           <div class="branch-line" style="width: 80%;"></div>
@@ -883,7 +856,6 @@ function SeventhPage() {
               <div class="node-number">34,832</div>
               <div class="node-percent">65%</div>
             </div>
-
             <!-- إناث غير سعوديات -->
             <div class="node">
               <div class="node-icon">
@@ -900,8 +872,7 @@ function SeventhPage() {
           </div>
         </div>
       </div>
-
-      <div class="header-box">
+      <div class="header-box" style="margin-top:50px;">
         <div class="header-text">
           من بين كل <strong>100</strong> حاج من حجاج الداخل لعام <strong>1446هـ</strong>: يوجد <strong>68</strong> حاج سعودي، منهم 36 من الإناث
         </div>
@@ -910,34 +881,32 @@ function SeventhPage() {
   `;
 }
 
-
-
 function EighthPage() {
   const viewEl = document.getElementById('view');
   viewEl.innerHTML = `
   <style>
     .org-chart{
       display:flex;align-items:center;justify-content:center;gap:40px;
-      flex-wrap:wrap;position:relative;margin:50px 0 20px; margin-top:70px;
+      flex-wrap:wrap;position:relative;margin:50px 0 20px; margin-top:90px;
     }
     .horizontal-connector{width:60px;height:3px;background:#dee2e6;flex-shrink:0;}
     .circle-node{
       display:flex;flex-direction:column;align-items:center;text-align:center;
       padding:20px;border-radius:16px;background:#fff;
       box-shadow:0 4px 12px rgba(0,0,0,.08);
-      min-width:290px;min-height:340px;border:2px solid #dee2e6;
+      min-width:400px;min-height:380px;border:2px solid #dee2e6;
     }
-    .main-circle{border-color:#495057;border-width:3px;min-width:330px;min-height:350px;padding:24px 20px;}
-    .side-circle{min-width:200px;}
+    .main-circle{border-color:#495057;border-width:3px;min-width:400px;min-height:380px;padding:24px 20px;}
+    .side-circle{min-width:330px;}
     .circle-node .icon{margin:25px 0 14px;color:#6c757d;} /* تستخدم currentColor */
-    .icon-svg{width:50px;height:50px;display:block}
-    .circle-node .label{font-size:26px;color:#6c757d;font-weight:600;margin-bottom:12px;}
-    .circle-node .number{font-size:40px;font-weight:700;color:#212529;direction:ltr;font-feature-settings:"tnum";margin-bottom:12px;}
-    .circle-node .percent,.circle-node .text{font-size:26px;color:#495057;font-weight:600;}
+    .icon-svg{margin-bottom:25px;width:50px;height:50px;display:block}
+    .circle-node .label{font-size:28px;color:#6c757d;font-weight:600;margin-bottom:12px;}
+    .circle-node .number{font-size:45px;font-weight:700;color:#212529;direction:ltr;font-feature-settings:"tnum";margin-bottom:12px;}
+    .circle-node .percent,.circle-node .text{font-size:30px;color:#495057;font-weight:600;}
     .header-box{
       background:linear-gradient(to left,#c6ae69 0%,#f2db8a 50%,#c6ae69 100%);
       padding:25px 30px;text-align:center;border-radius:10px;
-      box-shadow:0 4px 12px rgba(0,0,0,.1);max-width:860px;margin:80px auto 20px;
+      box-shadow:0 4px 12px rgba(0,0,0,.1);max-width:6000px;margin:100px auto 20px;
     }
     .header-text{color:#404042;font-size:25px;font-weight:400;line-height:1.7;}
     .header-text strong{font-weight:700;font-size:24px;}
@@ -964,16 +933,14 @@ function EighthPage() {
         <div class="node-number number">717,046</div>
         <div class="node-percent percent">48%</div>
       </div>
-
       <div class="horizontal-connector"></div>
-
       <!-- إجمالي حجاج الخارج -->
-      <div class="circle-node main-circle">
-        <div class="icon">
+      <div class="circle-node main-circle" >
+        <div class="icon" >
           <!-- أيقونة إجمالي (زوج/زوجة) -->
             <!-- أيقونة إجمالي (زوج/زوجة كبيرة) -->
            <svg viewBox="0 0 512 512" class="icon-svg"
-           style="width:50px;height:50px;margin-top:25px;color:#495058;">
+           style="width:50px;height:50px;margin-bottom:25px;color:#495058;">
            <circle cx="135.307" cy="42.478" r="42.478" fill="currentColor"/>
            <path d="M140.619,471.349v16.055c0,13.584,11.013,24.596,24.596,24.596c13.584,0,24.596-11.012,24.596-24.596v-16.055H140.619z" fill="currentColor"/>
            <path d="M80.808,471.349v16.055c0,13.584,11.013,24.596,24.596,24.596s24.596-11.012,24.596-24.596v-16.055H80.808z" fill="currentColor"/>
@@ -991,9 +958,7 @@ function EighthPage() {
         <div class="node-number number">1,506,576</div>
         <div class="node-percent percent">90%</div>
       </div>
-
       <div class="horizontal-connector"></div>
-
       <!-- ذكور خارج -->
       <div class="circle-node side-circle">
         <div class="icon">
@@ -1007,7 +972,6 @@ function EighthPage() {
         <div class="node-percent percent">52%</div>
       </div>
     </div>
-
     <div class="header-box">
       <div class="header-text">
         من بين كل <strong>100</strong> حاج من حجاج الخارج لعام <strong>1446هـ</strong>:
@@ -1016,13 +980,12 @@ function EighthPage() {
     </div>
   </div>`;
 }
-
     function NinthPage(){
       viewEl.innerHTML = `
         <div class="chart-card chart-card-line">
-          <div class="chart-title">توزيع حجاج الخارج وفقًا لوسيلة القُدوم والنوع لعام 1446هـ</div>
+          <div class="chart-title" style="font-size:22px; font-weight:600;">توزيع حجاج الخارج وفقًا لوسيلة القُدوم والنوع لعام 1446هـ</div>
           <div id="chart-transport" class="hc-590"></div>
-          <div style="text-align:center;margin-top:8px;font-size:16px;color:#495057;font-weight:800;">
+          <div style="text-align:center;margin-top:8px;font-size:22px;color:#495057;font-weight:700;">
             من بين كل 100 حاج من حجاج الخارج قدم 95 حاج جوًا في موسم حج 1446هـ.
           </div>
         </div>
@@ -1033,7 +996,7 @@ function EighthPage() {
           title:{ text:null },
           xAxis:{
             categories:['نقل بحري','نقل بري','نقل جوي'],
-            labels:{ style:{ fontSize:'14px' } }
+            labels:{ style:{ fontSize:'16px' } }
           },
           yAxis:{ title:{ text:null }, labels:{ enabled:false } },
           plotOptions:{
@@ -1069,17 +1032,16 @@ function EighthPage() {
               color:{ linearGradient:{x1:1,y1:0,x2:0,y2:0}, stops:[[0,'#9d9e9d'],[0.5,'#d6d7d6'],[1,'#9d9e9d']] }
             }
           ],
-          legend:{ align:'center', verticalAlign:'bottom', layout:'horizontal', itemStyle:{ fontSize:'14px' } }
+          legend:{ align:'center', verticalAlign:'bottom', layout:'horizontal', itemStyle:{ fontSize:'18px' } }
         });
       }, 60);
     }
-
     function TenthPage(){
       viewEl.innerHTML = `
         <div class="chart-card chart-card-line">
-          <div class="chart-title">توزيع أعداد حجاج الخارج وفقًا لمجموعات الدول لعام 1446هـ</div>
+          <div class="chart-title" style="font-size:22px; font-weight:600;">توزيع أعداد حجاج الخارج وفقًا لمجموعات الدول لعام 1446هـ</div>
           <div id="chart-country" class="hc-590"></div>
-          <div style="text-align:center;margin-top:8px;font-size:16px;color:#495057;font-weight:800;">
+          <div style="text-align:center;margin-top:10px;font-size:22px;color:#495057;font-weight:700;">
             من كل 10 حجاج من الخارج هناك 6 حجاج من الدول الآسيوية غير العربية في عام 1446هـ.
           </div>
         </div>
@@ -1090,14 +1052,14 @@ function EighthPage() {
           title:{ text:null },
           xAxis:{
             categories:['أمريكا وأستراليا','مجلس التعاون','أوروبا','إفريقيا غير العربية','الدول العربية (غير الخليج)','آسيا غير العربية'],
-            labels:{ style:{ fontSize:'14px' }, y:20 }, tickLength:0
+            labels:{ style:{ fontSize:'16px' }, y:20 }, tickLength:0
           },
           yAxis:{ title:{ text:null }, labels:{ enabled:false }, gridLineWidth:0 },
           plotOptions:{
             column:{
               animation:{ duration:5000 }, borderRadius:4, pointPadding:0.12, borderWidth:0,
               dataLabels:{
-                enabled:true, y:-10, verticalAlign:'top', style:{ fontSize:'14px', textOutline:'none' },
+                enabled:true, y:-13, verticalAlign:'top', style:{ fontSize:'21px', textOutline:'none' },
                 formatter:function(){
                   const total = 1506576;
                   const pct = ((this.y/total)*100).toFixed(1);
@@ -1116,8 +1078,6 @@ function EighthPage() {
         });
       }, 60);
     }
-
-    /* ====== بدء العرض ====== */
     function init(){ buildDots(); goTo(0); startAuto(); startBar(); }
     init();
   </script>
